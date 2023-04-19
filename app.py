@@ -63,3 +63,19 @@ def create_survey():
             return render_template("succes.html") 
         return render_template("create_survey.html", error="Falsches Passwort.")
     return render_template("create_survey.html")
+
+@app.route("/results/<token>", methods=['GET', 'POST'])
+def show_results(token):
+    if request.method == 'POST':
+        # writing results into file
+        with open(f'results/{token}.csv', 'a', newline='') as csvfile:
+            resultsWriter = csv.writer(csvfile, delimiter=' ',)
+            resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
+        return render_template("success.html")
+
+    # returning page for data input
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    xName = accessedSurvey.xName
+    yName = accessedSurvey.yName
+    title = accessedSurvey.title
+    return render_template("survey_results.html", title=title, xName=xName, yName=yName)
