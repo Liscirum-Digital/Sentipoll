@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubaerit: Neue Umfrage</title>
+</head>
+<body>
+    <h1>Einstellungen</h1>
+    {%if error%}
+        {{error}}
+    {%endif%}
+    <form action="" method="post">
+        <input type="text" id="title" name="title" placeholder="Titel" required>
+        <input type="text" id="xName" name="xName" placeholder="Name der x-Variable" required> 
+        <input type="text" id="yName" name="yName" placeholder="Name der y-Variable" required>
+        <input type="password" id="adminPassword" name="adminPassword" placeholder="Admin-Passwort">
+        <input type="submit">
+    </form>
+</body>
+</html>
