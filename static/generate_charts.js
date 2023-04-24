@@ -36,6 +36,7 @@ function updatePage() {
 
 function drawChart() {
   data = [[xName, yName]];
+  // get axis scaling
 
   for (var i = 0; i < results.length; i++) {
       result = [parseFloat(results[i][0]), parseFloat(results[i][1])]
@@ -56,6 +57,7 @@ function drawChart() {
     },
     vAxis: {
       title: yName,
+      scaleType: 'linear',
       viewWindowMode:'explicit',
       viewWindow: {
         min: parseFloat(document.getElementById('yRangeMin').value),
