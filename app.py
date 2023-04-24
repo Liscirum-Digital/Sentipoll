@@ -64,7 +64,7 @@ def validate_login(name, password):
 def start():
     return render_template('index.html')
 
-@app.route('/access/<token>', methods=['GET', 'POST'])
+@app.route('/survey/access/<token>', methods=['GET', 'POST'])
 def serve_survey(token):
     accessedSurvey = Surveys.query.filter_by(token=token).first()
 
@@ -91,7 +91,7 @@ def serve_survey(token):
     return response
         
 
-@app.route('/create', methods=['GET', 'POST'])
+@app.route('/survey/create', methods=['GET', 'POST'])
 def create_survey():
     if request.method == 'POST':
         if (session['username']):
@@ -130,7 +130,7 @@ def show_results(token):
     gatheredData = read_results(token)
     return render_template('results_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax, data=jsonify(gatheredData), token=token)
 
-@app.route('/manage')
+@app.route('/user/surveys')
 def all_surveys():
     #getting all surveys
     surveyEntrys = Surveys.query.all()
