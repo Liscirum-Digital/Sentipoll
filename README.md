@@ -10,5 +10,5 @@ The project is being developed by Liscirum Digital for CG.
 Turbaerit is being developed primarily for use in science lessons. The results of conducted experiments can be collected and visualised, thus making the data easier to analyse. The project can make lessons more interactive and enables collaboration to obtain large data sets. Turbaerit is also equipped with several security measures to prevent trolling and distortion of the results.
 
 ## Setup
-Download the project and run `setup.sh`. A development server should start.  
-Production deployment has not been enabled yet, but will be developed for Apache web servers.
+Download the project and run `setup.sh`. if you are on Windows (cringe), use the `--w` flag. A development server should start.  
+Production deployment has not been developed yet, but will be enabled for Apache 2 web servers.
