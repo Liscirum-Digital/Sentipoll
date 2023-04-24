@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubaerit: Nutzererstellung</title>
+</head>
+<body>
+    <h1>Login</h1>
+    Daten eingeben:
+    <form action="/user/create" method="post">
+        <input type="text" name="username" id="username" placeholder="Nutzername" required>
+        <input type="password" name="userPassword" id="userPassword" placeholder="Passwort" required>
+        <input type="password" name="adminPassword" id="adminPassword" placeholder="Admin-Passwort" required>
+        <input type="submit">
+    </form>
+</body>
+</html>
