@@ -1,5 +1,5 @@
 python -m venv venv
-. tenv/bin/activate
+. venv/bin/activate
 pip install -r requirements.txt
 python db-setup.py
 flask run
