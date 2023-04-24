@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,8 +10,8 @@
     <h1>Werteeingabe zu {{title}}</h1>
     Gemessene Werte:
     <form action="" method="post">
-        <input type="text" name="xInput" id="xInput" placeholder="{{xName}}">
-        <input type="text" name="yInput" id="yInput" placeholder="{{yName}}">
+        <input type="number" name="xInput" id="xInput" placeholder="{{xName}}" step="0.001" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%}>
+        <input type="number" name="yInput" id="yInput" placeholder="{{yName}}" step="0.001" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%}>
         <input type="submit">
     </form>
 </body>
