@@ -1,18 +1,70 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tubaerit: Eingabe</title>
-</head>
-<body>
-    <h1>Werteeingabe zu {{title}}</h1>
-    Gemessene Werte:
-    <form action="" method="post">
-        <input type="number" name="xInput" id="xInput" placeholder="{{xName}}" step="0.001" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%}>
-        <input type="number" name="yInput" id="yInput" placeholder="{{yName}}" step="0.001" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%}>
-        <input type="submit">
-    </form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+        <title>Tubaerit: Eingabe</title>
+        <link rel="icon" href="">
+        <script src="{{url_for('static', filename='nav.js')}}"></script>
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                  <img src="{{url_for('static', filename='logo_1.png')}}" width="28" height="28">
+                </a>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+            </div>
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                  <a class="navbar-item nav-color" href="#">
+                    Benutzerstellung
+                  </a>
+                  <a class="navbar-item nav-color" href="#">
+                    Umfragen
+                  </a>
+                  <a class="navbar-item nav-color" href="#">
+                      Hallo {{ username }}
+                  </a>
+                </div>
+            </div>
+        </nav>
+        <div class="container dark">
+          <div class="box dark">
+            <div class="columns is-mobile is-centered dark">
+              <div class="column has-text-centered-tablet acess-padding dark">
+                <p class="is-family-monospace is-size-3 acess-margin dark-white">Werteeingabe zu {{title}}</p>
+                <span class="is-size-6 is-italic dark-white">Gemessene Werte:</span>
+                <form action="" method="post">
+                  <div class="field">
+                    <label class="label dark-white">{{xName}}</label>
+                    <div class="control">
+                      <input class="input shadow schwarz dark dark-white" type="number" placeholder="{{xName}}" step="0.001" name="xInput" id="xInput" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%} required>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label dark-white">{{yName}}</label>
+                    <div class="control">
+                      <input class="input shadow schwarz dark dark-white" type="number" placeholder="{{yName}}" step="0.001" name="yInput" id="yInput" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%} required>
+                    </div>
+                  </div>
+                  <div class="control">
+                    <button class="button is-medium is-responsive shadow submit-button">
+                      <span>Bestätigen</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+    </body>
 </html>
