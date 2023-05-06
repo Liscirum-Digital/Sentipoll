@@ -1,0 +1,55 @@
+body {
+    background-color: rgba(109, 109, 109, 0.014);
+    /*background-color: #000c1a;*/
+    margin: 0;
+    font-size: 20px;
+}
+.cont {
+    padding-top: 65px;
+}
+.box {
+    margin: 15px;
+    box-shadow: 2px 2px 3px 1px #d1d1d1;
+    /*box-shadow: 2px 2px 3px 1px #313131;*/
+    border: 1px solid rgba(136, 136, 136, 0.74);
+}
+.nav-color {
+    color: #ffffff;
+}
+.acess-padding {
+    padding-top: 0;
+}
+.acess-margin {
+    margin-bottom: -8px;
+}
+.shadow {
+    box-shadow: 3px 3px 10px 1px #e6e6e6;
+    /*box-shadow: 3px 3px 10px 1px #252525;*/
+}
+.schwarz {
+    border-color: #b4b4b4;
+    /*border-color: #2c2c2c;*/
+}
+.schwarz:focus {
+    border-color: #021020;
+}
+.submit-button {
+    background-color: #a3a3a3;
+    color: #021020;
+    border-color: #021020;
+    border: 1px solid #707070;
+    border-radius: 5px;
+}
+.submit-button:hover {
+    background-color: #3d3d3d;
+    color: #d6d6d6;
+    border-color: #021020;
+}
+/*
+.dark {
+    background-color: #000c1a;
+}
+.dark-white {
+    color: #ffffff;
+}
+*/

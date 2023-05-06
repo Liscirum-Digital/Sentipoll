@@ -122,7 +122,7 @@ def create_survey():
         return redirect('/user/login')
     return render_template('create_survey.html')
 
-@app.route('/results/<token>', methods=['GET', 'POST'])
+@app.route('/survey/results/<token>', methods=['GET', 'POST'])
 def show_results(token):    
     # getting information about the survey
     accessedSurvey = Surveys.query.filter_by(token=token).first()
