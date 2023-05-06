@@ -13,7 +13,7 @@ function init(surveyTitle, x, y) {
   yName=y;
   setInterval(function() {
     updatePage();
-  }, 1000);
+  }, 5000);
 }
 
 // AJAX requests
@@ -46,6 +46,14 @@ function drawChart() {
     yScaling = 'log';
   }
 
+  if (document.getElementById('pointShapeSelect').value == 'cross') {
+    userPointShape = { type: 'star', sides: 4, dent: 0.2, rotation: 45 };
+  }
+
+  else {
+    userPointShape = document.getElementById('pointShapeSelect').value;
+  }
+
   for (var i = 0; i < results.length; i++) {
       result = [parseFloat(results[i][0]), parseFloat(results[i][1])]
       data.push(result);
@@ -73,12 +81,21 @@ function drawChart() {
         max: parseFloat(document.getElementById('yRangeMax').value),
       }
     },
+    pointSize: 10,
+    pointShape: userPointShape,
     width: '100%',
     height: '100%',
     legend: 'none'
   };
 
-  var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+  if (document.getElementById('lineChart').checked) {
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  }
+  else {
+    var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+  }
+
+  
 
   chart.draw(chartData, options);
 }

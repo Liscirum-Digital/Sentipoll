@@ -94,7 +94,7 @@ def serve_survey(token):
 @app.route('/survey/create', methods=['GET', 'POST'])
 def create_survey():
     if request.method == 'POST':
-        if (session['username']):
+        if (session.get('username')):
             # collecting data
             creator = session['username']
             token = tubaerit_utils.generateToken(8)
