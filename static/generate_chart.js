@@ -11,7 +11,6 @@ function init(surveyTitle, x, y) {
   title=surveyTitle;
   xName=x;
   yName=y;
-  setTimeout(updatePage(),500);
   setInterval(function() {
     updatePage();
   }, 5000);
