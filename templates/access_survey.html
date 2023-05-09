@@ -1,70 +1,47 @@
 <!DOCTYPE html>
 <html lang="de">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
-        <title>Tubaerit: Eingabe</title>
-        <link rel="icon" href="">
-        <script src="{{url_for('static', filename='nav.js')}}"></script>
-    </head>
-    <body>
-        <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="/">
-                  <img src="{{url_for('static', filename='logo_1.png')}}" width="28" height="28">
-                </a>
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                </a>
-            </div>
-            <div id="navbarBasicExample" class="navbar-menu">
-                <div class="navbar-start">
-                  <a class="navbar-item nav-color" href="#">
-                    Benutzerstellung
-                  </a>
-                  <a class="navbar-item nav-color" href="#">
-                    Umfragen
-                  </a>
-                  <a class="navbar-item nav-color" href="#">
-                      Hallo {{ username }}
-                  </a>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    <link rel="icon" href="">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <title>Tubaerit: Eingabe</title>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Werteeingabe zu {{title}}</p>
+            <span class="is-size-5-desktop is-size-6-touch is-italic dark-white">Gemessene Werte:</span>
+            <form action="" method="post">
+              <div class="field">
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">{{xName}}</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{xName}}" step="0.001" name="xInput" id="xInput" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%} required>
                 </div>
-            </div>
-        </nav>
-        <div class="container dark">
-          <div class="box dark">
-            <div class="columns is-mobile is-centered dark">
-              <div class="column has-text-centered-tablet acess-padding dark">
-                <p class="is-family-monospace is-size-3 acess-margin dark-white">Werteeingabe zu {{title}}</p>
-                <span class="is-size-6 is-italic dark-white">Gemessene Werte:</span>
-                <form action="" method="post">
-                  <div class="field">
-                    <label class="label dark-white">{{xName}}</label>
-                    <div class="control">
-                      <input class="input shadow schwarz dark dark-white" type="number" placeholder="{{xName}}" step="0.001" name="xInput" id="xInput" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%} required>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label dark-white">{{yName}}</label>
-                    <div class="control">
-                      <input class="input shadow schwarz dark dark-white" type="number" placeholder="{{yName}}" step="0.001" name="yInput" id="yInput" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%} required>
-                    </div>
-                  </div>
-                  <div class="control">
-                    <button class="button is-medium is-responsive shadow submit-button">
-                      <span>Bestätigen</span>
-                    </button>
-                  </div>
-                </form>
               </div>
-            </div>
+              <div class="field">
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">{{yName}}</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{yName}}" step="0.001" name="yInput" id="yInput" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%} required>
+                </div>
+              </div>
+              <div class="control">
+                <button class="button is-medium is-responsive shadow submit-button">
+                  <span>Bestätigen</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-    </body>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>

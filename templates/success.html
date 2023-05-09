@@ -1,18 +1,46 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    <link rel="icon" href="">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Erfolg</title>
-</head>
-<body>
-    <div>
-        <h1>Daten erfolgreich abgesendet.</h1>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            %if
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Daten erfolgreich abgesendet.</p>
+            %endif%
+            %if
+              <p class="is-size-2-desktop is-size-3-touch dark-white">
+                Daten erfolgreich abgesendet.
+              </p>
+              <a class="button is-medium is-responsive shadow submit-button" href="./survey/acess/{{title}}">
+                <span>Neue Eingabe</span>
+              </a>
+              <a class="button is-medium is-responsive shadow submit-button" href="./survey/results/{{title}}">
+                <span>Ergebnisse anzeigen</span>
+              </a>
+            %endif%
+            %if
+              <p class="is-size-2-desktop is-size-3-touch dark-white">
+                Umfrage erstellt. <br>
+                Token: <br> <a class="button is-medium is-responsive shadow submit-button" href="/survey/access/{{token}}">{{token}}</a>
+              </p>
+            %endif%
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-        <h1>Umfrage erstellt.</h1>
-        Token: {{token}} <br> (<a href="/survey/access/{{token}}">Link</a>)
-    </div>
-</body>
+    {% include 'link_git.html' %}
+  </body>
 </html>

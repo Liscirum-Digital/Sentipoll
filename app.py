@@ -91,7 +91,7 @@ def serve_survey(token):
     return response
         
 
-@app.route('/survey/create', methods=['GET', 'POST'])
+@app.route('/survey/new', methods=['GET', 'POST'])
 def create_survey():
     if request.method == 'POST':
         if (session.get('username')):
@@ -163,7 +163,7 @@ def login_user():
         return render_template('fail.html')
     return render_template('user_login.html')
 
-@app.route('/user/create', methods=['GET', 'POST'])
+@app.route('/user/new', methods=['GET', 'POST'])
 def create_user():
     if (request.method=='POST'):
         if (request.form['adminPassword'] == ADMIN_PASSWORD):

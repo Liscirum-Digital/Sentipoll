@@ -4,30 +4,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    <link rel="icon" href="">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Survey-Manager</title>
-</head>
-<body>
-    <h1>Erstellte Umfragen</h1>
-    <table style="border: 1px solid black;">
-        <tr>
-            <th>Titel</th>
-            <th>Antworten</th>
-            <th>Token</th>
-            <th>Teilnahme</th>
-            <th>Ergebnisse</th>
-        </tr>
-        {% for survey in surveys %}
-        <tr>
-            <th>{{survey.title}}</th>
-            <th>{{survey.answerCount}}</th>
-            <th>{{survey.token}}</th>
-            <th><a href="/survey/access/{{survey.token}}" target="_blank">/access/{{survey.token}}</a></th>
-            <th><a href="/survey/results/{{survey.token}}" target="_blank">/results/{{survey.token}}</a></th>
-            <th></th>
-        </tr>
-
-        {%endfor%}
-    </table>  
-    <button>neue survey erstellen</button>
-</body>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container dark">
+      <div class="columns is-mobile is-centered dark p-2">
+        <div class="column has-text-centered-tablet acess-padding dark">
+          <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Umfragen</p>
+          <table style="border: 1px solid black;">
+            <tr>
+                <th>Titel</th>
+                <th>Antworten</th>
+                <th>Token</th>
+                <th>Teilnahme</th>
+                <th>Ergebnisse</th>
+            </tr>
+            {% for survey in surveys %}
+            <tr>
+                <th>{{survey.title}}</th>
+                <th>{{survey.answerCount}}</th>
+                <th>{{survey.token}}</th>
+                <th><a href="/survey/access/{{survey.token}}" target="_blank">/access/{{survey.token}}</a></th>
+                <th><a href="/survey/results/{{survey.token}}" target="_blank">/results/{{survey.token}}</a></th>
+                <th></th>
+            </tr>
+            {%endfor%}
+          </table>  <br>
+          <button class="button is-medium is-responsive shadow">Neue survey erstellen</button>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>

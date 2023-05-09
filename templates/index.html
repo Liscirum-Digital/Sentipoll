@@ -4,10 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    <link rel="icon" href="">
     <title>Tubaerit: Start</title>
-</head>
-<body>
-    <h1>Herzlich willkommen bei Tubaerit!</h1>
-    Ich bin ein Text und ich bin sehr cool :D
-</body>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <div class="container dark">
+      <div class="columns is-mobile is-centered dark p-2">
+        <div class="column has-text-centered-tablet acess-padding dark">
+          <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Herzlich willkommen bei Tubaerit!</p>
+          <p class="is-size-3-desktop is-size-5-touch acess-margin dark-white">
+            Tubaerit ist ein Open-Source-Tool, mit dem Daten von lokalen Gruppen gesammelt werden können. <br>
+
+            Nach der Erstellung einer Umfrage können die Benutzer auf eine einfache Weboberfläche zugreifen und Messdaten bereitstellen. Die gesammelten Informationen werden in einem Diagramm dargestellt, können aber auch in eine CSV-Datei exportiert werden. <br>
+            
+            Das Projekt wird von Liscirum Digital für CG entwickelt. <br>
+          </p>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>

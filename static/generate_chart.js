@@ -11,6 +11,7 @@ function init(surveyTitle, x, y) {
   title=surveyTitle;
   xName=x;
   yName=y;
+  setTimeout(updatePage(),500);
   setInterval(function() {
     updatePage();
   }, 5000);
@@ -83,8 +84,8 @@ function drawChart() {
     },
     pointSize: 10,
     pointShape: userPointShape,
-    width: '100%',
-    height: '100%',
+    width: '2000',
+    height: '870',
     legend: 'none'
   };
 

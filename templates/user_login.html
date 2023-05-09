@@ -4,15 +4,41 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="icon" href="">
     <title>Tubaerit: Login</title>
-</head>
-<body>
-    <h1>Login</h1>
-    Daten eingeben:
-    <form action="/user/login" method="post">
-        <input type="text" name="username" id="username" placeholder="Nutzername" required>
-        <input type="password" name="userPassword" id="userPassword" placeholder="Nutzer-Passwort" required>
-        <input type="submit">
-    </form>
-</body>
+  </head>
+  <body>
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            <p class="is-size-2-desktop is-size-3-touch dark-white">Login</p>
+            <span class="is-size-5-desktop is-size-6-touch is-italic dark-white">Daten eingeben:</span>
+            <form action="/user/login" method="post">
+              <div class="field">
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">Nutzername</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-5" type="text" name="username" id="username" placeholder="Nutzername" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">Passwort</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-5" type="password" name="userPassword" id="userPassword" placeholder="Nutzer-Passwort" required>
+                </div>
+              </div>
+              <div class="control">
+                <button class="button is-medium is-responsive shadow submit-button">
+                  <span>Bestätigen</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>

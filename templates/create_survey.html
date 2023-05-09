@@ -1,27 +1,98 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    <link rel="icon" href="">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Neue Umfrage</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='variables.sass')}}">
-</head>
-<body>
-    <h1>Einstellungen</h1>
-    {%if error%}
-        {{error}}
-    {%endif%}
-    <form action="" method="post">
-        <input type="text" id="title" name="title" placeholder="Titel" required>
-        <input type="text" id="xName" name="xName" placeholder="Name der x-Variable" required> 
-        <input type="number" id="xMin" name="xMin" placeholder="Kleinstmögliches x" required>
-        <input type="number" id="xMax" name="xMax" placeholder="Größtmögliches x" required>
-        <input type="text" id="yName" name="yName" placeholder="Name der y-Variable" required>
-        <input type="number" id="yMin" name="yMin" placeholder="Kleinstmögliches y" required>
-        <input type="number" id="yMax" name="yMax" placeholder="Größtmögliches y" required>
-        <input type="number" id="inputsLimit" name="inputsLimit" placeholder="Maximale Messangaben">
-        <input type="submit">
-    </form>
-</body>
+    <style>
+      .field:not(:last-child) {
+        margin-bottom: 5px;
+      }
+      .label:not(:last-child) {
+        margin-bottom: 5px;
+      }
+      .margin-submit {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">Einstellungen</p>
+            <span class="is-size-5-desktop is-size-6-touch is-italic dark-white red"> 
+              {%if error%}
+                {{error}}
+              {%endif%}
+            </span>
+            <form action="" method="post">
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Titel</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="title" name="title" placeholder="Titel" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Name der x-Variable</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="xName" name="xName" placeholder="Name der x-Variable" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Kleinstmögliches x</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="xMin" name="xMin" placeholder="Kleinstmögliches x" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Größtmögliches x</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="xMax" name="xMax" placeholder="Größtmögliches x" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Name der y-Variable</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="yName" name="yName" placeholder="Name der y-Variable" required>
+                </div>
+              </div>              
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Kleinstmögliches y</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="yMin" name="yMin" placeholder="Kleinstmögliches y" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Größtmögliches y</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="yMax" name="yMax" placeholder="Größtmögliches y" required>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Maximale Messangaben</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="inputsLimit" name="inputsLimit" placeholder="Maximale Messangaben">
+                </div>
+              </div>
+              <div class="control">
+                <button class="button is-medium is-responsive shadow submit-button margin-submit">
+                  <span>Bestätigen</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>
