@@ -123,6 +123,7 @@ def create_survey():
     db.session.add(newSurvey)
     db.session.commit()
     db.session.refresh(newSurvey)     
+    open(f'results/{token}.csv', 'x') 
     return render_template('success.html', token=token, topic='newSurvey') 
     
     
@@ -133,7 +134,10 @@ def show_results(token):
     accessedSurvey = Surveys.query.filter_by(token=token).first()
     # getting results
     gatheredData = read_results(token)
-    return render_template('results_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax, data=jsonify(gatheredData), token=token)
+    error = None
+    if len(gatheredData)==0:
+        error='noResults'
+    return render_template('results_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax, data=jsonify(gatheredData), token=token, errorCode=error)
 
 @app.route('/survey/download/<token>', methods=['GET', 'POST'])
 def download_results(token):    
