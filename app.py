@@ -46,7 +46,7 @@ def sort_values():
 def read_results(token):
     results = []
     with open(f'results/{token}.csv', newline='') as csvfile:
-        resultsReader = csv.reader(csvfile, delimiter=' ')
+        resultsReader = csv.reader(csvfile, delimiter=',')
         for result in resultsReader:
             results.append(result)
     return sorted(results,key=lambda l:l[0])
@@ -59,7 +59,7 @@ def count_answers(token):
 
 def validate_login(name, password):
     accessedUser = Users.query.filter_by(name=name).first()
-    if (bcrypt.check_password_hash(accessedUser.password, password)):
+    if (accessedUser and bcrypt.check_password_hash(accessedUser.password, password)):
         return True
     return False
 
@@ -74,13 +74,13 @@ def serve_survey(token):
     if request.method == 'POST':
         # adding to inputs
         if (int(request.cookies.get(f'{token}_inputs')) >= accessedSurvey.inputsLimit):
-            return render_template('fail.html')
+            return render_template('access_survey.html', errorCode='overLimit')
         response = make_response(render_template('success.html', token=token, topic='newResult'))
         currentCount = int(request.cookies.get(f'{token}_inputs'))
         response.set_cookie(f'{token}_inputs', str(currentCount+1))          
         # writing results into file
         with open(f'results/{token}.csv', 'a', newline='') as csvfile:
-            resultsWriter = csv.writer(csvfile, delimiter=' ',)
+            resultsWriter = csv.writer(csvfile, delimiter=',',)
             resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
         return response
 
@@ -171,7 +171,7 @@ def login_user():
         return render_template('user_login.html')
     valid = validate_login(request.form['username'], request.form['userPassword'])
     if not valid:
-        return render_template('fail.html')
+        return render_template('user_login.html', errorCode='wrong-credentials')
     session['username'] = request.form['username']
     return render_template('success.html', topic='login')
     
@@ -191,7 +191,7 @@ def create_user():
     if (request.method=='GET'):
         return render_template('user_create.html')
     if (request.form['adminPassword'] != ADMIN_PASSWORD):
-        return render_template('fail.html')
+        return render_template('user_create.html', errorCode='wrong-credentials')
     newUser = Users(name=request.form['username'], password=bcrypt.generate_password_hash(request.form['userPassword']))
     db.session.add(newUser)
     db.session.commit()

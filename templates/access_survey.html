@@ -13,6 +13,9 @@
   </head>
   <body>
     {% include 'navbar.html' %}
+    {% if errorCode=="overLimit" %}
+      <h1>Zu viele Eingaben!</h1>
+    {% endif %}
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
