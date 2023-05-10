@@ -47,7 +47,8 @@
     <input type="checkbox" name="lineChart" id="lineChart" oninput="drawChart()"> Punkte verbinden 
     <br>
     <input type="number" name="fontSize" id="fontSize" oninput="drawChart()" value="20"> Schriftgröße
-
+    <br>
+    <input type="number" name="pointSize" id="pointSize" oninput="drawChart()" value="10"> Symbolgröße
     <input type="text" id="token" value="{{token}}" hidden>
     <script>init('{{title}}', '{{xName}}', '{{yName}}')</script>
     {% include 'link_git.html' %}

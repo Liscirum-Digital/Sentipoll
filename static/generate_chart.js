@@ -103,7 +103,7 @@ function drawChart() {
         fontSize: document.getElementById('fontSize').value,
       }
     },
-    pointSize: 10,
+    pointSize: document.getElementById('pointSize').value,
     pointShape: userPointShape,
     width: '2000',
     height: '870',
