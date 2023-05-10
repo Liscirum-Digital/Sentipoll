@@ -40,13 +40,16 @@ class Surveys(db.Model):
     
 
 # Helper functions
+def sort_values():
+    sorted = []
+
 def read_results(token):
     results = []
     with open(f'results/{token}.csv', newline='') as csvfile:
         resultsReader = csv.reader(csvfile, delimiter=' ')
         for result in resultsReader:
             results.append(result)
-    return results
+    return sorted(results,key=lambda l:l[0])
 
 def count_answers(token):
     if not path.exists(f'results/{token}.csv'):
@@ -156,10 +159,7 @@ def all_surveys():
 @app.route('/update/<token>', methods=['GET'])
 def update_results(token):
     gatheredData = read_results(token)
-    print(gatheredData)
     data = jsonify(gatheredData)
-    print(data)
-    # Return data as JSON response
     return data
 
 @app.route('/user/login', methods=['GET', 'POST'])

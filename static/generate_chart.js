@@ -63,6 +63,9 @@ function drawChart() {
 
   var options = {
     title: `${yName} in Abhängigkeit von ${xName}`,
+    titleTextStyle: {
+      fontSize: document.getElementById('fontSize').value*1.3,
+    },
     hAxis: {
       title: xName,
       scaleType: xScaling,
@@ -70,6 +73,12 @@ function drawChart() {
       viewWindow: {
         min: parseFloat(document.getElementById('xRangeMin').value),
         max: parseFloat(document.getElementById('xRangeMax').value),
+      },
+      textStyle : {
+        fontSize: document.getElementById('fontSize').value,
+      },
+      titleTextStyle: {
+        fontSize: document.getElementById('fontSize').value,
       }
     },
     vAxis: {
@@ -79,6 +88,12 @@ function drawChart() {
       viewWindow: {
         min: parseFloat(document.getElementById('yRangeMin').value),
         max: parseFloat(document.getElementById('yRangeMax').value),
+      },
+      textStyle : {
+        fontSize: document.getElementById('fontSize').value,
+      },
+      titleTextStyle: {
+        fontSize: document.getElementById('fontSize').value,
       }
     },
     pointSize: 10,
