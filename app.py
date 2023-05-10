@@ -75,7 +75,7 @@ def serve_survey(token):
         # adding to inputs
         if (int(request.cookies.get(f'{token}_inputs')) >= accessedSurvey.inputsLimit):
             return render_template('fail.html')
-        response = make_response(render_template('success.html'))
+        response = make_response(render_template('success.html', token=token, topic='newResult'))
         currentCount = int(request.cookies.get(f'{token}_inputs'))
         response.set_cookie(f'{token}_inputs', str(currentCount+1))          
         # writing results into file
@@ -96,34 +96,36 @@ def serve_survey(token):
 
 @app.route('/survey/new', methods=['GET', 'POST'])
 def create_survey():
-    if request.method == 'POST':
-        if (session.get('username')):
-            # collecting data
-            creator = session['username']
-            token = tubaerit_utils.generateToken(8)
-            while (Surveys.query.filter_by(token=token).first()):
-                token = tubaerit_utils.generateToken(8) # making sure the token isnt already used
-            xMin = None
-            xMax = None
-            yMin = None
-            yMax = None
-            if (request.form['xMin']):
-                xMin = request.form['xMin']
-            if (request.form['xMax']):
-                xMax = request.form['xMax']
-            if (request.form['yMin']):
-                yMin = request.form['yMin']
-            if (request.form['xMax']):
-                yMax = request.form['yMax']
-
-            # making database entry
-            newSurvey = Surveys(title=request.form['title'], creator=creator, token=token, xName=request.form['xName'], xMin=xMin, xMax=xMax, yName=request.form['yName'], yMin=yMin, yMax=yMax, inputsLimit=request.form['inputsLimit'])
-            db.session.add(newSurvey)
-            db.session.commit()
-            db.session.refresh(newSurvey)     
-            return render_template('survey_created.html', token=token) 
+    if request.method == 'GET':
+        return render_template('create_survey.html')
+    if (not session.get('username')):
         return redirect('/user/login')
-    return render_template('create_survey.html')
+    # collecting data
+    creator = session['username']
+    token = tubaerit_utils.generateToken(8)
+    while (Surveys.query.filter_by(token=token).first()):
+        token = tubaerit_utils.generateToken(8) # making sure the token isnt already used
+    xMin = None
+    xMax = None
+    yMin = None
+    yMax = None
+    if (request.form['xMin']):
+        xMin = request.form['xMin']
+    if (request.form['xMax']):
+        xMax = request.form['xMax']
+    if (request.form['yMin']):
+        yMin = request.form['yMin']
+    if (request.form['xMax']):
+        yMax = request.form['yMax']
+
+    # making database entry
+    newSurvey = Surveys(title=request.form['title'], creator=creator, token=token, xName=request.form['xName'], xMin=xMin, xMax=xMax, yName=request.form['yName'], yMin=yMin, yMax=yMax, inputsLimit=request.form['inputsLimit'])
+    db.session.add(newSurvey)
+    db.session.commit()
+    db.session.refresh(newSurvey)     
+    return render_template('success.html', token=token, topic='newSurvey') 
+    
+    
 
 @app.route('/survey/results/<token>', methods=['GET', 'POST'])
 def show_results(token):    
@@ -143,8 +145,11 @@ def download_results(token):
 
 @app.route('/user/surveys')
 def all_surveys():
+    if (not session.get('username')):
+        return redirect('/user/login')
+    
     #getting all surveys
-    surveyEntrys = Surveys.query.all()
+    surveyEntrys = Surveys.query.filter_by(creator=session.get('username')).all()
     surveys = []
     for surveyEntry in surveyEntrys:
         survey = {}
@@ -162,22 +167,35 @@ def update_results(token):
 
 @app.route('/user/login', methods=['GET', 'POST'])
 def login_user():
-    if (request.method=='POST'):
-        valid = validate_login(request.form['username'], request.form['userPassword'])
-        if valid:
-            session['username'] = request.form['username']
-            return render_template('success.html')
+    if (request.method=='GET'):
+        return render_template('user_login.html')
+    valid = validate_login(request.form['username'], request.form['userPassword'])
+    if not valid:
         return render_template('fail.html')
-    return render_template('user_login.html')
+    session['username'] = request.form['username']
+    return render_template('success.html', topic='login')
+    
+    
+
+@app.route('/user/logout', methods=['GET', 'POST'])
+def logout_user():
+    if (request.method=='GET'):
+        return render_template('user_logout.html')
+    if (session.get('username')):
+        session.pop('username')
+    return render_template('success.html', topic='logout')
+    
 
 @app.route('/user/new', methods=['GET', 'POST'])
 def create_user():
-    if (request.method=='POST'):
-        if (request.form['adminPassword'] == ADMIN_PASSWORD):
-            newUser = Users(name=request.form['username'], password=bcrypt.generate_password_hash(request.form['userPassword']))
-            db.session.add(newUser)
-            db.session.commit()
-            db.session.refresh(newUser)   
-            return render_template('success.html')
+    if (request.method=='GET'):
+        return render_template('user_create.html')
+    if (request.form['adminPassword'] != ADMIN_PASSWORD):
         return render_template('fail.html')
-    return render_template('user_create.html')
+    newUser = Users(name=request.form['username'], password=bcrypt.generate_password_hash(request.form['userPassword']))
+    db.session.add(newUser)
+    db.session.commit()
+    db.session.refresh(newUser)   
+    return render_template('success.html', topic='newUser')
+        
+    
