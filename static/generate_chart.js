@@ -11,6 +11,14 @@ function init(surveyTitle, x, y) {
   title=surveyTitle;
   xName=x;
   yName=y;
+  currentToken = document.getElementById('token').value;
+  fetch(`/update/${currentToken}`, {
+      method: 'GET',
+      headers: {
+      'Content-Type': 'application/json'
+      }
+  })
+  updatePage();
   setInterval(function() {
     updatePage();
   }, 5000);
@@ -18,20 +26,19 @@ function init(surveyTitle, x, y) {
 
 // AJAX requests
 function updatePage() {
-    currentToken = document.getElementById('token').value;
-    fetch(`/update/${currentToken}`, {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        results = data;
-    })
-    .catch(error => console.error('Error:', error));
-
-    drawChart();
+  currentToken = document.getElementById('token').value;
+  fetch(`/update/${currentToken}`, {
+      method: 'GET',
+      headers: {
+      'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      results = data;
+      drawChart();
+  })
+  .catch(error => console.error('Error:', error));
 }
 
 function drawChart() {
@@ -63,6 +70,9 @@ function drawChart() {
 
   var options = {
     title: `${yName} in Abhängigkeit von ${xName}`,
+    titleTextStyle: {
+      fontSize: document.getElementById('fontSize').value*1.3,
+    },
     hAxis: {
       title: xName,
       scaleType: xScaling,
@@ -70,6 +80,12 @@ function drawChart() {
       viewWindow: {
         min: parseFloat(document.getElementById('xRangeMin').value),
         max: parseFloat(document.getElementById('xRangeMax').value),
+      },
+      textStyle : {
+        fontSize: document.getElementById('fontSize').value,
+      },
+      titleTextStyle: {
+        fontSize: document.getElementById('fontSize').value,
       }
     },
     vAxis: {
@@ -79,9 +95,15 @@ function drawChart() {
       viewWindow: {
         min: parseFloat(document.getElementById('yRangeMin').value),
         max: parseFloat(document.getElementById('yRangeMax').value),
+      },
+      textStyle : {
+        fontSize: document.getElementById('fontSize').value,
+      },
+      titleTextStyle: {
+        fontSize: document.getElementById('fontSize').value,
       }
     },
-    pointSize: 10,
+    pointSize: document.getElementById('pointSize').value,
     pointShape: userPointShape,
     width: '2000',
     height: '870',

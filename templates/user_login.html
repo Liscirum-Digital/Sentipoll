@@ -10,6 +10,9 @@
     <title>Tubaerit: Login</title>
   </head>
   <body>
+    {% if errorCode=="wrong-credentials" %}
+      <h1>Der Nutzername bzw. das Passwort ist falsch.</h1>
+    {% endif %}
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">

@@ -17,26 +17,32 @@
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
           <div class="column has-text-centered-tablet acess-padding dark">
-            %if
-              <p class="is-size-2-desktop is-size-3-touch dark-white">Daten erfolgreich abgesendet.</p>
-            %endif%
-            %if
-              <p class="is-size-2-desktop is-size-3-touch dark-white">
-                Daten erfolgreich abgesendet.
-              </p>
-              <a class="button is-medium is-responsive shadow submit-button" href="./survey/acess/{{title}}">
+            {% if topic=="login" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Sie wurden erfolgreich eingeloggt!</p>
+            {% elif topic=="logout" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Sie wurden erfolgreich ausgeloggt.</p>
+            {% elif topic=="newUser" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Der Nutzer wurde erstellt.</p>
+              <a class="button is-medium is-responsive shadow submit-button" href="/user/login">
+                <span>Einloggen</span>
+              </a>
+            {% elif topic=="newSurvey" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Umfrage wurden erstellt.</p>
+              Token: {{token}} (<a href="/survey/access/{{token}}">Link</a>)
+            {% elif topic=="newResult" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Daten wurden übermittelt.</p>
+              <a class="button is-medium is-responsive shadow submit-button" href="/survey/access/{{token}}">
                 <span>Neue Eingabe</span>
               </a>
-              <a class="button is-medium is-responsive shadow submit-button" href="./survey/results/{{title}}">
+              <a class="button is-medium is-responsive shadow submit-button" href="/survey/results/{{token}}">
                 <span>Ergebnisse anzeigen</span>
               </a>
-            %endif%
-            %if
-              <p class="is-size-2-desktop is-size-3-touch dark-white">
-                Umfrage erstellt. <br>
-                Token: <br> <a class="button is-medium is-responsive shadow submit-button" href="/survey/access/{{token}}">{{token}}</a>
-              </p>
-            %endif%
+            {% else %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Aktion wurde erfolgreich durchgeführt.</p>
+            {% endif %}
+              
+             
+
           </div>
         </div>
       </div>
