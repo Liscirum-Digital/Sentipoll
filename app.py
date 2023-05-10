@@ -1,7 +1,7 @@
 import datetime
 import csv
-from os import path
-from flask import Flask, render_template, jsonify, redirect, request, make_response, session
+from os import path, getcwd
+from flask import Flask, render_template, jsonify, redirect, request, make_response, session, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -129,6 +129,15 @@ def show_results(token):
     # getting results
     gatheredData = read_results(token)
     return render_template('results_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax, data=jsonify(gatheredData), token=token)
+
+@app.route('/survey/download/<token>', methods=['GET', 'POST'])
+def download_results(token):    
+    if request.method == 'POST':
+        uploads = path.join(getcwd(), 'results')
+        return send_from_directory(uploads, f'{token}.csv')
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    print(accessedSurvey.title)
+    return render_template('download_results.html', title=accessedSurvey.title)
 
 @app.route('/user/surveys')
 def all_surveys():
