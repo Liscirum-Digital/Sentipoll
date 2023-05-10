@@ -11,6 +11,14 @@ function init(surveyTitle, x, y) {
   title=surveyTitle;
   xName=x;
   yName=y;
+  currentToken = document.getElementById('token').value;
+  fetch(`/update/${currentToken}`, {
+      method: 'GET',
+      headers: {
+      'Content-Type': 'application/json'
+      }
+  })
+  updatePage();
   setInterval(function() {
     updatePage();
   }, 5000);
@@ -18,20 +26,19 @@ function init(surveyTitle, x, y) {
 
 // AJAX requests
 function updatePage() {
-    currentToken = document.getElementById('token').value;
-    fetch(`/update/${currentToken}`, {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        results = data;
-    })
-    .catch(error => console.error('Error:', error));
-
-    drawChart();
+  currentToken = document.getElementById('token').value;
+  fetch(`/update/${currentToken}`, {
+      method: 'GET',
+      headers: {
+      'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      results = data;
+      drawChart();
+  })
+  .catch(error => console.error('Error:', error));
 }
 
 function drawChart() {

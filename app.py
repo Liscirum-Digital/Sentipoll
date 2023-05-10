@@ -139,7 +139,6 @@ def download_results(token):
         uploads = path.join(getcwd(), 'results')
         return send_from_directory(uploads, f'{token}.csv')
     accessedSurvey = Surveys.query.filter_by(token=token).first()
-    print(accessedSurvey.title)
     return render_template('download_results.html', title=accessedSurvey.title)
 
 @app.route('/user/surveys')
@@ -153,7 +152,6 @@ def all_surveys():
         survey['answerCount'] = count_answers(surveyEntry.token)
         survey['token'] = surveyEntry.token
         surveys.append(survey)
-    print(surveys)
     return render_template('manage_surveys.html', surveys=surveys)
 
 @app.route('/update/<token>', methods=['GET'])
