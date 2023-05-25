@@ -62,6 +62,9 @@ body {
     right: 0;
     margin: 5px;
 }
+.massage-round {
+    border-radius: 10px;
+}
 
 /*
 .dark {

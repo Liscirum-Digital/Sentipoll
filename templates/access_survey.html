@@ -13,9 +13,6 @@
   </head>
   <body>
     {% include 'navbar.html' %}
-    {% if errorCode=="overLimit" %}
-      <h1>Zu viele Eingaben!</h1>
-    {% endif %}
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
@@ -26,13 +23,13 @@
               <div class="field">
                 <label class="label is-size-4-desktop is-size-6-touch dark-white">{{xName}}</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{xName}}" step="0.001" name="xInput" id="xInput" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%} required>
+                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{xName}}" step="0.01" name="xInput" id="xInput" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%} required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-4-desktop is-size-6-touch dark-white">{{yName}}</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{yName}}" step="0.001" name="yInput" id="yInput" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%} required>
+                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{yName}}" step="0.01" name="yInput" id="yInput" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%} required>
                 </div>
               </div>
               <div class="control">
@@ -42,9 +39,22 @@
               </div>
             </form>
           </div>
+        </div>      
+        {% if errorCode=="overLimit" %}
+        <div class="is-centered my-3">
+          <article class="message is-danger is-medium massage-round">
+            <div class="message-header">
+              <p>Turbaerit Error</p>
+              <button class="delete is-medium" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+              Zu viele Eingaben! Bitte mäßige dich.
+            </div>
+          </article>
         </div>
+        {% endif %}
       </div>
-    </div>
     {% include 'link_git.html' %}
+    </div>
   </body>
 </html>

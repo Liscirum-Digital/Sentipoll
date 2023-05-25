@@ -69,7 +69,7 @@ function drawChart() {
   var chartData = google.visualization.arrayToDataTable(data);
 
   var options = {
-    title: `${yName} in Abhängigkeit von ${xName}`,
+    title: `${title}: ${yName} in Abhängigkeit von ${xName}`,
     titleTextStyle: {
       fontSize: document.getElementById('fontSize').value*1.3,
     },

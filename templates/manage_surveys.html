@@ -16,26 +16,33 @@
     <div class="container dark">
       <div class="columns is-mobile is-centered dark p-2">
         <div class="column has-text-centered-tablet acess-padding dark">
-          <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Umfragen</p>
-          <table style="border: 1px solid black;">
-            <tr>
-                <th>Titel</th>
-                <th>Antworten</th>
-                <th>Token</th>
-                <th>Teilnahme</th>
-                <th>Ergebnisse</th>
-            </tr>
-            {% for survey in surveys %}
-            <tr>
-                <th>{{survey.title}}</th>
-                <th>{{survey.answerCount}}</th>
-                <th>{{survey.token}}</th>
-                <th><a href="/survey/access/{{survey.token}}" target="_blank">/access/{{survey.token}}</a></th>
-                <th><a href="/survey/results/{{survey.token}}" target="_blank">/results/{{survey.token}}</a></th>
-                <th></th>
-            </tr>
-            {%endfor%}
-          </table>  <br>
+          <p class="is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Umfragen</p>
+          <div class="table-container">
+            <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Titel</th>
+                  <th>Antworten</th>
+                  <th>Token</th>
+                  <th>Teilnahme</th>
+                  <th>Ergebnisse</th>
+                  <th>Download</th>
+                </tr>
+              </thead>
+              {% for survey in surveys %}
+              <tbody>
+                <tr>
+                  <th>{{survey.title}}</th>
+                  <th>{{survey.answerCount}}</th>
+                  <th>{{survey.token}}</th>
+                  <th><a href="/survey/access/{{survey.token}}" target="_blank">/access/{{survey.token}}</a></th>
+                  <th><a href="/survey/results/{{survey.token}}" target="_blank">/results/{{survey.token}}</a></th>
+                  <th><a href="/survey/results/download{{survey.token}}" target="_blank">/results/download/{{survey.token}}</th>
+                </tr>
+              </tbody>
+              {%endfor%}
+            </table>
+          </div>
           <a href="/survey/new"><button class="button is-medium is-responsive shadow">Neue Survey erstellen</button></a>
         </div>
       </div>

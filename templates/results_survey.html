@@ -25,16 +25,16 @@
     <div id="chart_div" style="width: 100%; height: 100%;"></div>
     x-Achse einstellen:
     <input type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-    <input type="range" name="xRangeMin" id="xRangeMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.001" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
-    <input type="number" name="xNumberMin" id="xNumberMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.001" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
-    <input type="range" name="xRangeMax" id="xRangeMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.001" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
-    <input type="number" name="xNumberMax" id="xNumberMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.001" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
+    <input type="range" name="xRangeMin" id="xRangeMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
+    <input type="number" name="xNumberMin" id="xNumberMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
+    <input type="range" name="xRangeMax" id="xRangeMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.01" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
+    <input type="number" name="xNumberMax" id="xNumberMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.01" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
     y-Achse einstellen:
     <input type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-    <input type="range" name="yRangeMin" id="yRangeMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" step="0.001" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
-    <input type="number" name="yNumberMin" id="yNumberMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
-    <input type="range" name="yRangeMax" id="yRangeMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" step="0.001" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
-    <input type="number" name="yNumberMax" id="yNumberMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
+    <input type="range" name="yRangeMin" id="yRangeMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
+    <input type="number" name="yNumberMin" id="yNumberMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
+    <input type="range" name="yRangeMax" id="yRangeMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" step="0.01" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
+    <input type="number" name="yNumberMax" id="yNumberMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" step="0.01" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
     <select name="pointShapeSelect" id="pointShapeSelect" oninput="drawChart();">
       <option value="circle">Kreis</option>
       <option value="cross">Kreuz</option>
@@ -50,6 +50,7 @@
     <br>
     <input type="number" name="pointSize" id="pointSize" oninput="drawChart()" value="10"> Symbolgröße
     <input type="text" id="token" value="{{token}}" hidden>
+    download
     <script>init('{{title}}', '{{xName}}', '{{yName}}')</script>
     {% include 'link_git.html' %}
   </body>
