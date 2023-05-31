@@ -18,7 +18,9 @@
   </head>
 
   <body style="min-height: 100%;">
-    {% include 'navbar.html' %}
+    {% if username %}
+      {% include 'navbar.html' %}
+    {% endif %}
     {% if errorCode=="noResults" %}
       <h1>Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.</h1>
     {% endif %}
@@ -51,6 +53,13 @@
     <input type="number" name="pointSize" id="pointSize" oninput="drawChart()" value="10"> Symbolgröße
     <input type="text" id="token" value="{{token}}" hidden>
     download
+    {% if username %}
+      <form action="/survey/delete/{{token}}" method="post">
+        <input type="number" name="deleteX" id="deleteX" min="{{xMin}}" max="{{xMax}}" value="0" step="0.01" hidden>
+        <input type="number" name="deleteY" id="deleteY" min="{{yMin}}" max="{{yMax}}" value="0" step="0.01" hidden>
+        <input type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+      </form>
+    {% endif %}
     <script>init('{{title}}', '{{xName}}', '{{yName}}')</script>
     {% include 'link_git.html' %}
   </body>

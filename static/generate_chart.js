@@ -2,6 +2,7 @@ var results = []
 var title = ""
 var xName = ""
 var yName = ""
+var coordinates = [0, 0]
 
 
 function init(surveyTitle, x, y) {
@@ -117,7 +118,16 @@ function drawChart() {
     var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
   }
 
-  
+  function selectHandler() {
+    var selectedItem = chart.getSelection()[0];
+    if (selectedItem) {
+      document.getElementById('deleteSubmit').disabled = false;
+      document.getElementById('deleteX').value = chartData.getValue(selectedItem.row, 0);
+      document.getElementById('deleteY').value = chartData.getValue(selectedItem.row, 1);
+    }
+  }
+
+  google.visualization.events.addListener(chart, 'select', selectHandler);  
 
   chart.draw(chartData, options);
 }

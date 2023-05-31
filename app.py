@@ -73,25 +73,21 @@ def serve_survey(token):
 
     if request.method == 'POST':
         # adding to inputs
-        if (int(request.cookies.get(f'{token}_inputs')) >= accessedSurvey.inputsLimit):
-            return render_template('access_survey.html', errorCode='overLimit')
-        response = make_response(render_template('success.html', token=token, topic='newResult'))
-        currentCount = int(request.cookies.get(f'{token}_inputs'))
-        response.set_cookie(f'{token}_inputs', str(currentCount+1))          
+        if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
+            return render_template('access_survey.html', errorCode='overLimit', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax)
+        session[f'{token}_inputs']+=1
         # writing results into file
         with open(f'results/{token}.csv', 'a', newline='') as csvfile:
-            resultsWriter = csv.writer(csvfile, delimiter=',',)
+            resultsWriter = csv.writer(csvfile, delimiter=',')
             resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
-        return response
+        return render_template('success.html', token=token, topic='newResult')
 
     # getting data for page
-    response = make_response(render_template('access_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax))
     # set cookie
-    if (f'{token}_inputs' not in request.cookies):
-        expireDate = datetime.datetime.now()
-        expireDate += datetime.timedelta(days=7)
-        response.set_cookie(f'{token}_inputs', '0', expires=expireDate)
-    return response
+    if (not session.get(f'{token}_inputs')):
+        session.permanent = True
+        session[f'{token}_inputs']=0
+    return render_template('access_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax)
         
 
 @app.route('/survey/new', methods=['GET', 'POST'])
@@ -101,7 +97,6 @@ def create_survey():
     if (not session.get('username')):
         return redirect('/user/login')
     # collecting data
-    creator = session['username']
     token = tubaerit_utils.generateToken(8)
     while (Surveys.query.filter_by(token=token).first()):
         token = tubaerit_utils.generateToken(8) # making sure the token isnt already used
@@ -119,7 +114,17 @@ def create_survey():
         yMax = request.form['yMax']
 
     # making database entry
-    newSurvey = Surveys(title=request.form['title'], creator=creator, token=token, xName=request.form['xName'], xMin=xMin, xMax=xMax, yName=request.form['yName'], yMin=yMin, yMax=yMax, inputsLimit=request.form['inputsLimit'])
+    newSurvey = Surveys(
+        title=request.form['title'], 
+        creator=session.get('username'), 
+        token=token, 
+        xName=request.form['xName'], 
+        xMin=xMin, 
+        xMax=xMax, 
+        yName=request.form['yName'], 
+        yMin=yMin, 
+        yMax=yMax, 
+        inputsLimit=request.form['inputsLimit'])
     db.session.add(newSurvey)
     db.session.commit()
     db.session.refresh(newSurvey)     
@@ -137,7 +142,38 @@ def show_results(token):
     error = None
     if len(gatheredData)==0:
         error='noResults'
-    return render_template('results_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax, data=jsonify(gatheredData), token=token, errorCode=error)
+    return render_template(
+        'results_survey.html', 
+        title=accessedSurvey.title, 
+        xName=accessedSurvey.xName, 
+        xMin=accessedSurvey.xMin,
+        xMax=accessedSurvey.xMax, 
+        yName=accessedSurvey.yName, 
+        yMin=accessedSurvey.yMin,
+        yMax=accessedSurvey.yMax, 
+        data=jsonify(gatheredData),
+        token=token, 
+        errorCode=error,
+        username=session.get('username'))
+
+@app.route('/survey/delete/<token>', methods=['GET', 'POST'])
+def delete_point(token):
+    if (request.method == 'GET'):
+        return redirect('/')
+    if (session.get('username') != Surveys.query.filter_by(token=token).first().creator): # wrong user
+        return redirect('/user/login')
+    deleteX = request.form['deleteX']
+    deleteY = request.form['deleteY']
+    deletePoint = [deleteX, deleteY]
+    print(deletePoint)
+    oldData = read_results(token)
+    with open(f'results/{token}.csv', 'w', newline='') as newFile:
+        writer = csv.writer(newFile, delimiter=',')
+        for line in oldData:
+            print(line)
+            if line!=deletePoint:
+                writer.writerow(line)
+    return redirect(f'/survey/results/{token}')
 
 @app.route('/survey/download/<token>', methods=['GET', 'POST'])
 def download_results(token):    
@@ -176,6 +212,7 @@ def login_user():
     valid = validate_login(request.form['username'], request.form['userPassword'])
     if not valid:
         return render_template('user_login.html', errorCode='wrong-credentials')
+    session.permanent = True
     session['username'] = request.form['username']
     return render_template('success.html', topic='login')
     
