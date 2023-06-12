@@ -131,3 +131,10 @@ function drawChart() {
 
   chart.draw(chartData, options);
 }
+
+document.addEventListener('click', function(event) {
+  document.getElementById('deleteSubmit').disabled = true;
+  document.getElementById('deleteX').value = null;
+      document.getElementById('deleteY').value = null;
+  updatePage();
+});

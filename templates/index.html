@@ -11,7 +11,9 @@
     <title>Tubaerit: Start</title>
   </head>
   <body>
-    {% include 'navbar.html' %}
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     
     <div class="container dark p-5 mt-4">
@@ -21,19 +23,19 @@
             <div class="tile is-parent">
               <article class="tile is-child box">
                 <p class="title">Umfragen</p>
-                <p class="subtitle">UMFRAGENANZAHL</p>
+                <p class="subtitle">{{surveyCount}}</p>
               </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child box">
                 <p class="title">Antworten</p>
-                <p class="subtitle">ANTWORTENANZAHL</p>
+                <p class="subtitle">{{answerCount}}</p>
               </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child box">
                 <p class="title">Webseitenaufrufe</p>
-                <p class="subtitle">ANZAHL</p>
+                <p class="subtitle">{{visits}}</p>
               </article>
             </div>
             <div class="tile is-parent">

@@ -30,7 +30,7 @@
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
           <div class="column has-text-centered-tablet acess-padding dark">
-            <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">Einstellungen</p>
+            <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">Einstellungen bearbeiten</p>
             <span class="is-size-5-desktop is-size-6-touch is-italic dark-white red"> 
               {%if error%}
                 {{error}}
@@ -40,49 +40,49 @@
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Titel</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="title" name="title" placeholder="Titel" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="title" name="title" placeholder="Titel" value="{{survey.title}}" required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Name der x-Variable</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="xName" name="xName" placeholder="Name der x-Variable" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="xName" name="xName" placeholder="Name der x-Variable" value="{{survey.xName}}" required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Kleinstmögliches x</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="xMin" name="xMin" placeholder="Kleinstmögliches x" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="xMin" name="xMin" placeholder="Kleinstmögliches x" value="{{survey.xMin}}" required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Größtmögliches x</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="xMax" name="xMax" placeholder="Größtmögliches x" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="xMax" name="xMax" placeholder="Größtmögliches x" value="{{survey.xMax}}" required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Name der y-Variable</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="yName" name="yName" placeholder="Name der y-Variable" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="yName" name="yName" placeholder="Name der y-Variable" value="{{survey.yName}}" required>
                 </div>
               </div>              
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Kleinstmögliches y</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="yMin" name="yMin" placeholder="Kleinstmögliches y" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="yMin" name="yMin" placeholder="Kleinstmögliches y" value="{{survey.yMin}}" required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Größtmögliches y</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="yMax" name="yMax" placeholder="Größtmögliches y" required>
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="yMax" name="yMax" placeholder="Größtmögliches y" value="{{survey.yMax}}" required>
                 </div>
               </div>
               <div class="field">
                 <label class="label is-size-5-desktop is-size-6-touch dark-white">Maximale Messangaben</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="inputsLimit" name="inputsLimit" placeholder="Maximale Messangaben">
+                  <input class="input shadow schwarz dark dark-white p-2" type="number" id="inputsLimit" name="inputsLimit" placeholder="Maximale Messangaben" value="{{survey.inputsLimit}}">
                 </div>
               </div>
               <div class="control">

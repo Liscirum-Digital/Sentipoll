@@ -12,24 +12,26 @@
     <title>Tubaerit: Eingabe</title>
   </head>
   <body>
-    {% include 'navbar.html' %}
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
           <div class="column has-text-centered-tablet acess-padding dark">
-            <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Werteeingabe zu {{title}}</p>
+            <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Werteeingabe zu {{survey.title}}</p>
             <span class="is-size-5-desktop is-size-6-touch is-italic dark-white">Gemessene Werte:</span>
             <form action="" method="post">
               <div class="field">
-                <label class="label is-size-4-desktop is-size-6-touch dark-white">{{xName}}</label>
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">{{survey.xName}}</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{xName}}" step="0.01" name="xInput" id="xInput" {% if xMin%}min="{{xMin}}"{%endif%} {% if xMax%}max="{{xMax}}"{%endif%} required>
+                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{survey.xName}}" step="0.01" name="xInput" id="xInput" {% if survey.xMin%}min="{{survey.xMin}}"{%endif%} {% if survey.xMax%}max="{{survey.xMax}}"{%endif%} required>
                 </div>
               </div>
               <div class="field">
-                <label class="label is-size-4-desktop is-size-6-touch dark-white">{{yName}}</label>
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">{{survey.yName}}</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{yName}}" step="0.01" name="yInput" id="yInput" {% if yMin%}min="{{yMin}}"{%endif%} {% if yMax%}max="{{yMax}}"{%endif%} required>
+                  <input class="input shadow schwarz dark dark-white p-5" type="number" placeholder="{{survey.yName}}" step="0.01" name="yInput" id="yInput" {% if survey.yMin%}min="{{survey.yMin}}"{%endif%} {% if survey.yMax%}max="{{survey.yMax}}"{%endif%} required>
                 </div>
               </div>
               <div class="control">
