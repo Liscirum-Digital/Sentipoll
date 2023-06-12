@@ -5295,7 +5295,7 @@ button.dropdown-item.is-active {
 }
 
 .modal-background {
-  background-color: rgba(10, 10, 10, 0.86);
+  background-color: rgb(163, 163, 163, 0.7);
 }
 
 .modal-content,

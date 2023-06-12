@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turbaerit: Download</title>
-</head>
-<body>
-    <h1>Möchten Sie die Daten zu "{{title}}" herunterladen?</h1>
-    <form action="" method="post">
-        <input type="submit" value="Herunterladen">
-    </form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+        <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+        <title>Turbaerit: Download</title>
+        <script>
+            function timerStart() { 
+            setTimeout(function(){
+                window.close();
+                },1000);
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container dark">
+            <div class="box dark">
+                <div class="columns is-mobile is-centered dark">
+                    <div class="column has-text-centered-tablet acess-padding dark">
+                        <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Möchten Sie die Daten zu "{{title}}" herunterladen?</p>
+                        <form action="" method="post">
+                            <a onclick="timerStart();"><input class="button is-medium is-responsive shadow" type="submit" value="Herunterladen"></a>
+                            <button class="button is-medium is-responsive shadow" type="button" onclick="javascript:window.history.back();">Ne!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

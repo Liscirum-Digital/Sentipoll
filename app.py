@@ -178,8 +178,6 @@ def login_user():
         return render_template('user_login.html', errorCode='wrong-credentials')
     session['username'] = request.form['username']
     return render_template('success.html', topic='login')
-    
-    
 
 @app.route('/user/logout', methods=['GET', 'POST'])
 def logout_user():
@@ -189,7 +187,6 @@ def logout_user():
         session.pop('username')
     return render_template('success.html', topic='logout')
     
-
 @app.route('/user/new', methods=['GET', 'POST'])
 def create_user():
     if (request.method=='GET'):
@@ -202,4 +199,12 @@ def create_user():
     db.session.refresh(newUser)   
     return render_template('success.html', topic='newUser')
         
-    
+@app.route('/admin/login', methods=['GET', 'POST'])
+def login_admin():
+    if (request.method=='GET'):
+        return render_template('admin_login.html')
+    valid = validate_login(request.form['username'], request.form['userPassword'])
+    if not valid:
+        return render_template('user_login.html', errorCode='wrong-credentials')
+    session['username'] = request.form['username']
+    return render_template('success.html', topic='login')

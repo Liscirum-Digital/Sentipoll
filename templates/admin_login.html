@@ -7,26 +7,20 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
-    <title>Tubaerit: Login</title>
+    <title>Tubaerit: Admin Login</title>
   </head>
   <body>
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
           <div class="column has-text-centered-tablet acess-padding dark">
-            <p class="is-size-2-desktop is-size-3-touch dark-white">Login</p>
+            <p class="is-size-2-desktop is-size-3-touch dark-white">Admin Login</p>
             <span class="is-size-5-desktop is-size-6-touch is-italic dark-white">Daten eingeben:</span>
             <form action="/user/login" method="post">
               <div class="field">
-                <label class="label is-size-4-desktop is-size-6-touch dark-white">Nutzername</label>
-                <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-5" type="text" name="username" id="username" placeholder="Nutzername" required>
-                </div>
-              </div>
-              <div class="field">
                 <label class="label is-size-4-desktop is-size-6-touch dark-white">Passwort</label>
                 <div class="control input-size">
-                  <input class="input shadow schwarz dark dark-white p-5" type="password" name="userPassword" id="userPassword" placeholder="Nutzer-Passwort" required>
+                  <input class="input shadow schwarz dark dark-white p-5" type="password" name="userPassword" id="userPassword" placeholder="Admin-Passwort" required>
                 </div>
               </div>
               <div class="control">
@@ -40,13 +34,13 @@
         {% if errorCode=="wrong-credentials" %}
           <div class="is-centered my-3 error-keyframe">
             <article class="message is-danger is-medium massage-round shadow">
-                <div class="message-header">
-                  <p>Turbaerit Error</p>
-                  <button class="delete is-medium" aria-label="delete"></button>
-                </div>
-                <div class="message-body">
-                  Der Nutzername bzw. das Passwort ist falsch.
-                </div>
+              <div class="message-header">
+                <p>Turbaerit Error</p>
+                <button class="delete is-medium" aria-label="delete"></button>
+              </div>
+              <div class="message-body">
+                Der Nutzername bzw. das Passwort ist falsch.
+              </div>
             </article>
           </div>
         {% endif %}

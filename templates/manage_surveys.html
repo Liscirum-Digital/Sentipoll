@@ -7,9 +7,25 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
-    <link rel="icon" href="">
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Survey-Manager</title>
+    <style>
+      @media only screen and (min-width: 1201px) {
+          .overflow-mobile {
+              overflow-x: auto;
+              table-layout: fixed;
+          }
+      }
+      @media only screen and (max-width: 1200px) {
+          .overflow-mobile {
+              overflow-x: scroll;
+          }
+      }
+      .table { 
+        overflow-y: hidden;
+      } 
+    </style>
   </head>
   <body>
     {% include 'navbar.html' %}
@@ -18,7 +34,7 @@
         <div class="column has-text-centered-tablet acess-padding dark">
           <p class="is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Umfragen</p>
           <div class="table-container">
-            <table class="table is-striped is-narrow is-hoverable is-fullwidth">
+            <table class="table is-striped is-narrow is-hoverable is-fullwidth overflow-mobile">
               <thead>
                 <tr>
                   <th>Titel</th>
@@ -27,6 +43,7 @@
                   <th>Teilnahme</th>
                   <th>Ergebnisse</th>
                   <th>Download</th>
+                  <th>Löschen</th>
                 </tr>
               </thead>
               {% for survey in surveys %}
@@ -35,14 +52,16 @@
                   <th>{{survey.title}}</th>
                   <th>{{survey.answerCount}}</th>
                   <th>{{survey.token}}</th>
-                  <th><a href="/survey/access/{{survey.token}}" target="_blank">/access/{{survey.token}}</a></th>
-                  <th><a href="/survey/results/{{survey.token}}" target="_blank">/results/{{survey.token}}</a></th>
-                  <th><a href="/survey/results/download{{survey.token}}" target="_blank">/results/download/{{survey.token}}</th>
+                  <th><a href="/survey/access/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow">Werteeingabe</button></a></th>
+                  <th><a href="/survey/results/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow">Results</button></a></th>
+                  <th><a href="/survey/download/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow is-success">Download</button></th>
+                  <th><a href="/survey/delete/{{survey.token}}"><button class="button is-small is-responsive shadow is-danger">Löschen</button></th>
                 </tr>
               </tbody>
               {%endfor%}
             </table>
           </div>
+          <hr style="margin: 15px;">
           <a href="/survey/new"><button class="button is-medium is-responsive shadow">Neue Survey erstellen</button></a>
         </div>
       </div>

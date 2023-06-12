@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
-    <link rel="icon" href="">
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Neue Umfrage</title>
     <style>
@@ -30,9 +30,19 @@
           <div class="column has-text-centered-tablet acess-padding dark">
             <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">Einstellungen</p>
             <span class="is-size-5-desktop is-size-6-touch is-italic dark-white red"> 
-              {%if error%}
-                {{error}}
-              {%endif%}
+              {% if error%}
+                <div class="is-centered my-3 error-keyframe">
+                  <article class="message is-danger is-medium massage-round shadow">
+                    <div class="message-header">
+                      <p>Turbaerit Error</p>
+                      <button class="delete is-medium" aria-label="delete"></button>
+                    </div>
+                    <div class="message-body">
+                      {{error}}
+                    </div>
+                  </article>
+                </div>
+              {% endif %}
             </span>
             <form action="" method="post">
               <div class="field">
