@@ -7,10 +7,24 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
-    <link rel="icon" href="">
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Turbaerit: Ergebnisse</title>
-
+    <style>
+      .number-style {
+        height: 3em;
+        width: 8rem;
+        border: 2px #ACE1AF;
+        font-size: larger;
+      }
+      .checkbox-style {
+        background-color: #fff;
+        border: 2px solid rgba(0,0,0,.25);
+        width: 1.1em;
+        height: 1.1em;
+        border-radius: 0.25em;
+      }
+    </style>
     {% if errorCode==None %}
       <script type="text/javascript" src="{{url_for('static', filename='google_loader.js')}}"></script>
       <script type="text/javascript" src="{{url_for('static', filename='generate_chart.js')}}"></script>
@@ -24,43 +38,127 @@
     {% if errorCode=="noResults" %}
       <h1>Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.</h1>
     {% endif %}
-    <div id="chart_div" style="width: 100%; height: 100%;"></div>
-    x-Achse einstellen:
-    <input type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-    <input type="range" name="xRangeMin" id="xRangeMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
-    <input type="number" name="xNumberMin" id="xNumberMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
-    <input type="range" name="xRangeMax" id="xRangeMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
-    <input type="number" name="xNumberMax" id="xNumberMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
-    y-Achse einstellen:
-    <input type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-    <input type="range" name="yRangeMin" id="yRangeMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
-    <input type="number" name="yNumberMin" id="yNumberMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
-    <input type="range" name="yRangeMax" id="yRangeMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
-    <input type="number" name="yNumberMax" id="yNumberMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
-    <select name="pointShapeSelect" id="pointShapeSelect" oninput="drawChart();">
-      <option value="circle">Kreis</option>
-      <option value="cross">Kreuz</option>
-      <option value="triangle">Dreieck</option>
-      <option value="square">Quadrat</option>
-      <option value="diamond">Raute</option>
-      <option value="star">Stern</option>
-      <option value="polygon">Fünfeck</option>
-    </select>
-    <input type="checkbox" name="lineChart" id="lineChart" oninput="drawChart()"> Punkte verbinden 
-    <br>
-    <input type="number" name="fontSize" id="fontSize" oninput="drawChart()" value="20"> Schriftgröße
-    <br>
-    <input type="number" name="pointSize" id="pointSize" oninput="drawChart()" value="10"> Symbolgröße
+  
     <input type="text" id="token" value="{{survey.token}}" hidden>
-    download
-    {% if creator %}
-      <form action="/survey/delete/{{survey.token}}" method="post">
-        <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
-        <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
-        <input type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
-      </form>
-    {% endif %}
     <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>
+    <script>
+          document.addEventListener('DOMContentLoaded', () => {
+        // Functions to open and close a modal
+        function openModal($el) {
+          $el.classList.add('is-active');
+        }
+      
+        function closeModal($el) {
+          $el.classList.remove('is-active');
+        }
+      
+        function closeAllModals() {
+          (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+            closeModal($modal);
+          });
+        }
+      
+        // Add a click event on buttons to open a specific modal
+        (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+          const modal = $trigger.dataset.target;
+          const $target = document.getElementById(modal);
+      
+          $trigger.addEventListener('click', () => {
+            openModal($target);
+          });
+        });
+      
+        // Add a click event on various child elements to close the parent modal
+        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+          const $target = $close.closest('.modal');
+      
+          $close.addEventListener('click', () => {
+            closeModal($target);
+          });
+        });
+      
+        // Add a keyboard event to close all modals
+        document.addEventListener('keydown', (event) => {
+          const e = event || window.event;
+      
+          if (e.keyCode === 27) { // Escape key
+            closeAllModals();
+          }
+        });
+      });
+    </script>
+
+    <div class="class-modal">
+      <button class="button is-normal js-modal-trigger" data-target="modal-js">
+        <span class="icon is-small" style="width: 1rem;">
+          <img src="{{url_for('static', filename='3_picture.png')}}">
+        </span>
+        <span>Einstellungen</span>
+      </button>
+    </div>
+
+    <div class="modal" id="modal-js">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Einstellungen</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">X-Achse einstellen:</label>
+            <div class="control box">
+              <input class="checkbox-style" type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
+              <input class="width" type="range" name="xRangeMin" id="xRangeMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="xNumberMin" id="xNumberMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
+              <input class="width" type="range" name="xRangeMax" id="xRangeMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="xNumberMax" id="xNumberMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Y-Achse einstellen:</label>
+            <div class="control box">
+              <input class="checkbox-style" type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
+              <input class="width" type="range" name="yRangeMin" id="yRangeMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="yNumberMin" id="yNumberMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
+              <input class="width" type="range" name="yRangeMax" id="yRangeMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="yNumberMax" id="yNumberMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Darstellung:</label>
+            <div class="control box">
+              <div class="select is-normal">
+                <select name="pointShapeSelect" id="pointShapeSelect" oninput="drawChart();">
+                  <option value="circle">Kreis</option>
+                  <option value="cross">Kreuz</option>
+                  <option value="triangle">Dreieck</option>
+                  <option value="square">Quadrat</option>
+                  <option value="diamond">Raute</option>
+                  <option value="star">Stern</option>
+                  <option value="polygon">Fünfeck</option>
+                </select>
+              </div>
+              <input class="checkbox-style" type="checkbox" name="lineChart" id="lineChart" oninput="drawChart()"> Punkte verbinden
+              <br>
+              <input class="number-style" type="number" name="fontSize" id="fontSize" oninput="drawChart()" value="20"> Schriftgröße
+              <br>
+              <input class="number-style" type="number" name="pointSize" id="pointSize" oninput="drawChart()" value="10"> Symbolgröße
+            </div>
+          </div>
+        </section>
+        {% if creator %}
+            <form action="/survey/delete/{{survey.token}}" method="post">
+                <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
+                <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
+                <input type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+            </form>
+        {% endif %}
+        <footer class="modal-card-foot field is-grouped is-grouped-centered">
+          <a href="/survey/results/download/{{survey.token}}" target="_blank"><button class="button is-success">Download</button></a>
+        </footer>
+      </div>
+    </div>
     {% include 'link_git.html' %}
   </body>
 </html>

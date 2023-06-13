@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,88 +19,24 @@
     <div class="container dark p-5 mt-4">
       <div class="columns is-mobile is-centered dark">
         <div class="column has-text-centered-tablet acess-padding dark">
-          <div class="tile is-ancestor">
-            <div class="tile is-parent">
-              <article class="tile is-child box">
-                <p class="title">Umfragen</p>
-                <p class="subtitle">{{surveyCount}}</p>
-              </article>
-            </div>
-            <div class="tile is-parent">
-              <article class="tile is-child box">
-                <p class="title">Antworten</p>
-                <p class="subtitle">{{answerCount}}</p>
-              </article>
-            </div>
-            <div class="tile is-parent">
-              <article class="tile is-child box">
-                <p class="title">Webseitenaufrufe</p>
-                <p class="subtitle">{{visits}}</p>
-              </article>
-            </div>
-            <div class="tile is-parent">
-              <article class="tile is-child box">
-                <p class="title">GitHub</p>
-                <p class="subtitle">
-                  <div class="class-github">
-                    <a class="button is-small" href="https://github.com/Liscirum-Digital/Turbaerit" target="_blank">
-                      <span class="icon is-small">
-                        <img src="{{url_for('static', filename='logo_github1.png')}}" width="24" height="24">
-                      </span>
-                      <span>GitHub</span>
-                    </a>
-                  </div>
-                </p>
-              </article>
-            </div>
+          <div>
+            <h1 class="title is-size-2-desktop is-size-3-touch">Herzlich willkommen bei Tubaerit!</h1>
+            <h2 class="subtitle is-size-3-desktop is-size-4-touch">Das Projekt wird von Liscirum Digital für den interaktiven Physik-Unterricht entwickelt.</h2>
+            <p class="is-size-5-desktop is-size-6-touch">
+              Tubaerit ist ein Open-Source-Tool, mit dem Daten von lokalen Gruppen gesammelt werden können. <br><br>
+
+              Nach der Erstellung einer Umfrage können die Benutzer auf eine einfache Webschnittstelle zugreifen und Messdaten bereitstellen. <br>
+              Die gesammelten Informationen werden in einem Diagramm dargestellt, können aber auch in eine CSV-Datei exportiert werden. <br><br>
+
+              Turbaerit wird in erster Linie für den Einsatz im naturwissenschaftlichen Unterricht entwickelt. Die Ergebnisse von durchgeführten Experimenten können gesammelt und visualisiert werden, wodurch die Daten leichter zu analysieren sind. <br><br>
+              Das Projekt kann den Unterricht interaktiver gestalten und ermöglicht die Zusammenarbeit, um große Datensätze zu erhalten. Turbaerit ist außerdem mit verschiedenen Sicherheitsmaßnahmen ausgestattet, um Trolling und Verfälschung der Ergebnisse zu verhindern. <br>
+            </p>
           </div>
-          
-          <div class="tile is-ancestor">
-            <div class="tile is-vertical is-9">
-              <div class="tile">
-                <div class="tile is-vertical">
-                  <div class="tile is-parent">
-                    <article class="tile is-child box">
-                      <p class="title">Herzlich willkommen bei Tubaerit!</p>
-                      <p class="subtitle"><i>voll mit basierten tschads...</i></p>
-                      <div class="content">
-                        <img src="{{url_for('static', filename='logo_1.png')}}" alt="logo" width="200px" height="200px">
-                      </div>
-                    </article>
-                  </div>
-                </div>
-              </div>
-              <div class="tile">
-                <div class="tile is-8 is-parent">
-                  <article class="tile is-child box">
-                    <p class="title">Open Source</p>
-                    <div class="content">
-                      <p>Tubaerit ist ein Open-Source-Tool, mit dem Daten von lokalen Gruppen gesammelt werden können.</p>
-                    </div>
-                  </article>
-                </div>
-                <div class="tile is-parent">
-                  <article class="tile is-child box">
-                    <p class="title">Klares Ziel</p>
-                    <div class="content">
-                      <p>Das Projekt wird von Liscirum Digital für den Physik-Unterricht entwickelt.</p>
-                    </div>
-                  </article>
-                </div>
-              </div>
-            </div>
-            <div class="tile is-parent">
-              <article class="tile is-child box">
-                <div class="content">
-                  <p class="title">Funktionsweise</p>
-                  <p class="subtitle"><i>simpel...</i></p>
-                  <div class="content">
-                    Nach der Erstellung einer Umfrage können die Benutzer auf eine einfache Weboberfläche zugreifen und Messdaten bereitstellen. Die gesammelten Informationen werden in einem Diagramm dargestellt, können aber auch in eine CSV-Datei exportiert werden. <br>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
+          <hr style="margin: 15px;">
+          <a href="/user/login"><button class="button is-medium is-responsive shadow">Login</button></a>
+          <a href="/admin/login"><button class="button is-medium is-responsive shadow">Admin login</button></a> 
+          <br><br>
+          <img src="{{url_for('static', filename='logo_1.png')}}" alt="logo" width="200px" height="200px">
         </div>
       </div>
     </div>

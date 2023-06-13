@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
-    <link rel="icon" href="">
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Eingabe</title>
   </head>
@@ -43,8 +43,8 @@
           </div>
         </div>      
         {% if errorCode=="overLimit" %}
-        <div class="is-centered my-3">
-          <article class="message is-danger is-medium massage-round">
+        <div class="is-centered my-3 error-keyframe">
+          <article class="message is-danger is-medium massage-round shadow">
             <div class="message-header">
               <p>Turbaerit Error</p>
               <button class="delete is-medium" aria-label="delete"></button>

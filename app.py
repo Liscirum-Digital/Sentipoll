@@ -217,7 +217,7 @@ def login_user():
     session.permanent = True
     session['username'] = request.form['username']
     return render_template('success.html', topic='login', user=session.get('username'))
-    
+   
 @app.route('/user/logout', methods=['GET', 'POST'])
 def logout_user():
     if (not session.get('username')):
@@ -249,4 +249,12 @@ def admin_user():
     session['admin'] = True
     return render_template('success.html', topic='admin-login', user=session.get('username'))
         
-    
+@app.route('/admin/login', methods=['GET', 'POST'])
+def login_admin():
+    if (request.method=='GET'):
+        return render_template('admin_login.html')
+    valid = validate_login(request.form['username'], request.form['userPassword'])
+    if not valid:
+        return render_template('user_login.html', errorCode='wrong-credentials')
+    session['username'] = request.form['username']
+    return render_template('success.html', topic='login')

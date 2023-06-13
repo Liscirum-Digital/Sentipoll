@@ -4,6 +4,21 @@ body {
     margin: 0;
     font-size: 20px;
 }
+/* Error Messages */
+.error-keyframe {
+    animation: error-scale 2s ease 0s 1 normal forwards;
+}
+@keyframes error-scale {
+	0% {
+		transform: scale(0);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+
 .cont {
     padding-top: 65px;
 }
@@ -56,16 +71,34 @@ body {
         margin-right: 100px;
     }
 }
+.class-home {
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 35px;
+    right: 0;
+    margin: 5px;
+}
 .class-github {
     position: fixed;
     bottom: 0;
     right: 0;
     margin: 5px;
 }
+.class-modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 5px;
+}
 .massage-round {
     border-radius: 10px;
 }
-
+.width{
+    width: 70%;
+}
+.dark {
+    color: #021020;
+}
 /*
 .dark {
     background-color: #000c1a;

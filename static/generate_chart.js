@@ -107,7 +107,7 @@ function drawChart() {
     pointSize: document.getElementById('pointSize').value,
     pointShape: userPointShape,
     width: '2000',
-    height: '870',
+    height: '860',
     legend: 'none'
   };
 
