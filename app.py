@@ -10,6 +10,7 @@ import tubaerit_utils
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tubaerit.db'
 app.config['SECRET_KEY'] = 'REPLACE'
+ADMIN_NAME = 'EDIT'
 ADMIN_PASSWORD = 'CHANGE'
 
 
@@ -225,6 +226,7 @@ def logout_user():
     if (request.method=='GET'):
         return render_template('user_logout.html')
     session.pop('username')
+    session.pop('admin')
     return render_template('success.html', topic='logout', user=session.get('username'))
     
 @app.route('/user/new', methods=['GET', 'POST'])
@@ -243,18 +245,10 @@ def create_user():
 def admin_user():
     if (request.method=='GET'):
         return render_template('admin_login.html', user=session.get('username'))
-    if request.form['adminPassword'] != ADMIN_PASSWORD:
+    if (request.form['adminPassword'] != ADMIN_PASSWORD or request.form['adminName'] != ADMIN_NAME):
         return render_template('admin_login.html', errorCode='wrong-credentials', user=session.get('username'))
     session.permanent = True
     session['admin'] = True
+    session['username'] = "Admin"
     return render_template('success.html', topic='admin-login', user=session.get('username'))
-        
-@app.route('/admin/login', methods=['GET', 'POST'])
-def login_admin():
-    if (request.method=='GET'):
-        return render_template('admin_login.html')
-    valid = validate_login(request.form['username'], request.form['userPassword'])
-    if not valid:
-        return render_template('user_login.html', errorCode='wrong-credentials')
-    session['username'] = request.form['username']
-    return render_template('success.html', topic='login')
+    
