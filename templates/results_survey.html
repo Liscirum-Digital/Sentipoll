@@ -32,13 +32,15 @@
   </head>
 
   <body style="min-height: 100%;">
-    {% include 'navbar.html' %}
+    {% if username %}
+      {% include 'navbar.html' %}
+    {% endif %}
     {% if errorCode=="noResults" %}
       <h1>Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.</h1>
     {% endif %}
-    <div id="chart_div" style="width: 100%; height: 100%;"></div>
-    <input type="text" id="token" value="{{token}}" hidden>
-    <script>init('{{title}}', '{{xName}}', '{{yName}}')</script>
+  
+    <input type="text" id="token" value="{{survey.token}}" hidden>
+    <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>
     <script>
           document.addEventListener('DOMContentLoaded', () => {
         // Functions to open and close a modal
@@ -107,20 +109,20 @@
             <label class="label">X-Achse einstellen:</label>
             <div class="control box">
               <input class="checkbox-style" type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-              <input class="width" type="range" name="xRangeMin" id="xRangeMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
-              <input class="number-style" type="number" name="xNumberMin" id="xNumberMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
-              <input class="width" type="range" name="xRangeMax" id="xRangeMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.01" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
-              <input class="number-style" type="number" name="xNumberMax" id="xNumberMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.01" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
+              <input class="width" type="range" name="xRangeMin" id="xRangeMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="xNumberMin" id="xNumberMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
+              <input class="width" type="range" name="xRangeMax" id="xRangeMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="xNumberMax" id="xNumberMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
             </div>
           </div>
           <div class="field">
             <label class="label">Y-Achse einstellen:</label>
             <div class="control box">
               <input class="checkbox-style" type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-              <input class="width" type="range" name="yRangeMin" id="yRangeMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
-              <input class="number-style" type="number" name="yNumberMin" id="yNumberMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
-              <input class="width" type="range" name="yRangeMax" id="yRangeMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" step="0.01" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
-              <input class="number-style" type="number" name="yNumberMax" id="yNumberMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" step="0.01" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
+              <input class="width" type="range" name="yRangeMin" id="yRangeMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="yNumberMin" id="yNumberMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
+              <input class="width" type="range" name="yRangeMax" id="yRangeMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="yNumberMax" id="yNumberMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
             </div>
           </div>
           <div class="field">
@@ -145,8 +147,15 @@
             </div>
           </div>
         </section>
+        {% if creator %}
+            <form action="/survey/delete/{{survey.token}}" method="post">
+                <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
+                <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
+                <input type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+            </form>
+        {% endif %}
         <footer class="modal-card-foot field is-grouped is-grouped-centered">
-          <a href="/survey/results/download/{{token}}" target="_blank"><button class="button is-success">Download</button></a>
+          <a href="/survey/results/download/{{survey.token}}" target="_blank"><button class="button is-success">Download</button></a>
         </footer>
       </div>
     </div>

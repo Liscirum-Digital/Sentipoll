@@ -10,6 +10,14 @@
     <title>Tubaerit: Login</title>
   </head>
   <body>
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
+    
+    {% if errorCode=="wrong-account" %}
+      <h1>Du kannst mit deinem Konto nicht auf diesen Inhalt zugreifen.</h1>
+    {% endif %}
+  
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">

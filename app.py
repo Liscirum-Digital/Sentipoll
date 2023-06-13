@@ -65,7 +65,7 @@ def validate_login(name, password):
 
 @app.route('/')
 def start():
-    return render_template('index.html')
+    return render_template('index.html', user=session.get('username'))
 
 @app.route('/survey/access/<token>', methods=['GET', 'POST'])
 def serve_survey(token):
@@ -73,58 +73,71 @@ def serve_survey(token):
 
     if request.method == 'POST':
         # adding to inputs
-        if (int(request.cookies.get(f'{token}_inputs')) >= accessedSurvey.inputsLimit):
-            return render_template('access_survey.html', errorCode='overLimit')
-        response = make_response(render_template('success.html', token=token, topic='newResult'))
-        currentCount = int(request.cookies.get(f'{token}_inputs'))
-        response.set_cookie(f'{token}_inputs', str(currentCount+1))          
+        if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
+            return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'))
+        session[f'{token}_inputs']+=1
         # writing results into file
         with open(f'results/{token}.csv', 'a', newline='') as csvfile:
-            resultsWriter = csv.writer(csvfile, delimiter=',',)
+            resultsWriter = csv.writer(csvfile, delimiter=',')
             resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
-        return response
+        return render_template('success.html', token=token, topic='newResult', user=session.get('username'))
 
     # getting data for page
-    response = make_response(render_template('access_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax))
     # set cookie
-    if (f'{token}_inputs' not in request.cookies):
-        expireDate = datetime.datetime.now()
-        expireDate += datetime.timedelta(days=7)
-        response.set_cookie(f'{token}_inputs', '0', expires=expireDate)
-    return response
+    if (not session.get(f'{token}_inputs')):
+        session.permanent = True
+        session[f'{token}_inputs']=0
+    return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'))
         
 
 @app.route('/survey/new', methods=['GET', 'POST'])
 def create_survey():
     if request.method == 'GET':
-        return render_template('create_survey.html')
+        return render_template('create_survey.html', user=session.get('username'))
     if (not session.get('username')):
         return redirect('/user/login')
     # collecting data
-    creator = session['username']
     token = tubaerit_utils.generateToken(8)
     while (Surveys.query.filter_by(token=token).first()):
         token = tubaerit_utils.generateToken(8) # making sure the token isnt already used
-    xMin = None
-    xMax = None
-    yMin = None
-    yMax = None
-    if (request.form['xMin']):
-        xMin = request.form['xMin']
-    if (request.form['xMax']):
-        xMax = request.form['xMax']
-    if (request.form['yMin']):
-        yMin = request.form['yMin']
-    if (request.form['xMax']):
-        yMax = request.form['yMax']
 
     # making database entry
-    newSurvey = Surveys(title=request.form['title'], creator=creator, token=token, xName=request.form['xName'], xMin=xMin, xMax=xMax, yName=request.form['yName'], yMin=yMin, yMax=yMax, inputsLimit=request.form['inputsLimit'])
+    newSurvey = Surveys(
+        title=request.form['title'], 
+        creator=session.get('username'), 
+        token=token, 
+        xName=request.form['xName'], 
+        xMin=request.form['xMin'], 
+        xMax=request.form['xMax'], 
+        yName=request.form['yName'], 
+        yMin=request.form['yMin'], 
+        yMax=request.form['yMax'], 
+        inputsLimit=request.form['inputsLimit'])
     db.session.add(newSurvey)
     db.session.commit()
     db.session.refresh(newSurvey)     
     open(f'results/{token}.csv', 'x') 
-    return render_template('success.html', token=token, topic='newSurvey') 
+    return render_template('success.html', token=token, topic='newSurvey', user=session.get('username')) 
+
+@app.route('/survey/edit/<token>', methods=['GET', 'POST'])
+def edit_survey(token):
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    if (accessedSurvey.creator != session.get('username')):
+        return redirect('/user/login', errorCode='wrong-account')
+    if request.method == 'GET':
+        return render_template('edit_survey.html', survey=accessedSurvey, user=session.get('username'))
+
+    #making database entry
+    accessedSurvey.title=request.form['title']
+    accessedSurvey.xName=request.form['xName']
+    accessedSurvey.xMin=request.form['xMin']
+    accessedSurvey.xMax=request.form['xMax']
+    accessedSurvey.yName=request.form['yName']
+    accessedSurvey.yMin=request.form['yMin']
+    accessedSurvey.yMax=request.form['yMax'] 
+    accessedSurvey.inputsLimit=request.form['inputsLimit']
+    db.session.commit()  
+    return render_template('success.html', token=token, topic='editSurvey', user=session.get('username')) 
     
     
 
@@ -137,7 +150,32 @@ def show_results(token):
     error = None
     if len(gatheredData)==0:
         error='noResults'
-    return render_template('results_survey.html', title=accessedSurvey.title, xName=accessedSurvey.xName, xMin=accessedSurvey.xMin, xMax=accessedSurvey.xMax, yName=accessedSurvey.yName, yMin=accessedSurvey.yMin, yMax=accessedSurvey.yMax, data=jsonify(gatheredData), token=token, errorCode=error)
+    return render_template(
+        'results_survey.html',
+        survey=accessedSurvey, 
+        data=jsonify(gatheredData),
+        errorCode=error,
+        username=session.get('username'),
+        creator = session.get('username') == accessedSurvey.creator)
+
+@app.route('/survey/delete/<token>', methods=['GET', 'POST'])
+def delete_point(token):
+    if (request.method == 'GET'):
+        return redirect('/')
+    if (session.get('username') != Surveys.query.filter_by(token=token).first().creator): # wrong user
+        return redirect('/user/login')
+    deleteX = request.form['deleteX']
+    deleteY = request.form['deleteY']
+    deletePoint = [deleteX, deleteY]
+    print(deletePoint)
+    oldData = read_results(token)
+    with open(f'results/{token}.csv', 'w', newline='') as newFile:
+        writer = csv.writer(newFile, delimiter=',')
+        for line in oldData:
+            print(line)
+            if line!=deletePoint:
+                writer.writerow(line)
+    return redirect(f'/survey/results/{token}')
 
 @app.route('/survey/download/<token>', methods=['GET', 'POST'])
 def download_results(token):    
@@ -172,32 +210,44 @@ def update_results(token):
 @app.route('/user/login', methods=['GET', 'POST'])
 def login_user():
     if (request.method=='GET'):
-        return render_template('user_login.html')
+        return render_template('user_login.html', user=session.get('username'))
     valid = validate_login(request.form['username'], request.form['userPassword'])
     if not valid:
-        return render_template('user_login.html', errorCode='wrong-credentials')
+        return render_template('user_login.html', errorCode='wrong-credentials', user=session.get('username'))
+    session.permanent = True
     session['username'] = request.form['username']
-    return render_template('success.html', topic='login')
-
+    return render_template('success.html', topic='login', user=session.get('username'))
+   
 @app.route('/user/logout', methods=['GET', 'POST'])
 def logout_user():
+    if (not session.get('username')):
+        return redirect('/user/login')
     if (request.method=='GET'):
         return render_template('user_logout.html')
-    if (session.get('username')):
-        session.pop('username')
-    return render_template('success.html', topic='logout')
+    session.pop('username')
+    return render_template('success.html', topic='logout', user=session.get('username'))
     
 @app.route('/user/new', methods=['GET', 'POST'])
 def create_user():
+    if (not session.get('admin')):
+        return redirect('/admin/login')
     if (request.method=='GET'):
         return render_template('user_create.html')
-    if (request.form['adminPassword'] != ADMIN_PASSWORD):
-        return render_template('user_create.html', errorCode='wrong-credentials')
     newUser = Users(name=request.form['username'], password=bcrypt.generate_password_hash(request.form['userPassword']))
     db.session.add(newUser)
     db.session.commit()
     db.session.refresh(newUser)   
-    return render_template('success.html', topic='newUser')
+    return render_template('success.html', topic='newUser', user=session.get('username'))
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_user():
+    if (request.method=='GET'):
+        return render_template('admin_login.html', user=session.get('username'))
+    if request.form['adminPassword'] != ADMIN_PASSWORD:
+        return render_template('admin_login.html', errorCode='wrong-credentials', user=session.get('username'))
+    session.permanent = True
+    session['admin'] = True
+    return render_template('success.html', topic='admin-login', user=session.get('username'))
         
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login_admin():

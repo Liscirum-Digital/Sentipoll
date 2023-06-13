@@ -11,7 +11,9 @@
     <title>Tubaerit: Start</title>
   </head>
   <body>
-    {% include 'navbar.html' %}
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     
     <div class="container dark p-5 mt-4">
