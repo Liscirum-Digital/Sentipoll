@@ -250,6 +250,7 @@ def admin_user():
         return render_template('admin_login.html', errorCode='wrong-credentials', user=session.get('username'))
     session.permanent = True
     session['admin'] = True
-    session['username'] = "Admin"
+    if (not session.get['username']):
+        session['username'] = 'Admin'
     return render_template('success.html', topic='admin-login', user=session.get('username'))
     
