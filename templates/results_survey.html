@@ -38,6 +38,8 @@
     {% if errorCode=="noResults" %}
       <h1>Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.</h1>
     {% endif %}
+
+    <div id="chart_div"></div>
   
     <input type="text" id="token" value="{{survey.token}}" hidden>
     <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>

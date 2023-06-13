@@ -226,7 +226,8 @@ def logout_user():
     if (request.method=='GET'):
         return render_template('user_logout.html')
     session.pop('username')
-    session.pop('admin')
+    if session.get('admin'):
+        session.pop('admin')
     return render_template('success.html', topic='logout', user=session.get('username'))
     
 @app.route('/user/new', methods=['GET', 'POST'])

@@ -36,8 +36,10 @@ function updatePage() {
   })
   .then(response => response.json())
   .then(data => {
-      results = data;
-      drawChart();
+      if (data!=results) {
+        results = data;
+        drawChart();
+      }
   })
   .catch(error => console.error('Error:', error));
 }
@@ -132,9 +134,8 @@ function drawChart() {
   chart.draw(chartData, options);
 }
 
-document.addEventListener('click', function(event) {
+/*document.addEventListener('click', function(event) {
   document.getElementById('deleteSubmit').disabled = true;
   document.getElementById('deleteX').value = null;
-      document.getElementById('deleteY').value = null;
-  updatePage();
-});
+  document.getElementById('deleteY').value = null;
+});*/
