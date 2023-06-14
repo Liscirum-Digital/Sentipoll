@@ -6,7 +6,7 @@ body {
 }
 /* Error Messages */
 .error-keyframe {
-    animation: error-scale 2s ease 0s 1 normal forwards;
+    animation: error-scale 1.1s ease 0s 1 normal forwards;
 }
 @keyframes error-scale {
 	0% {
@@ -17,7 +17,6 @@ body {
 		transform: scale(1);
 	}
 }
-
 
 .cont {
     padding-top: 65px;
@@ -68,7 +67,7 @@ body {
 }
 @media screen and (max-width: 768px) {
         .input-size {
-        margin-right: 100px;
+        margin-right: none;
     }
 }
 .class-home {
@@ -92,9 +91,6 @@ body {
 }
 .massage-round {
     border-radius: 10px;
-}
-.width{
-    width: 70%;
 }
 .dark {
     color: #021020;
