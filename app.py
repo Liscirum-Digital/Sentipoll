@@ -1,3 +1,4 @@
+import os
 import datetime
 import csv
 from os import path, getcwd
@@ -36,13 +37,14 @@ class Surveys(db.Model):
     yName = db.Column(db.String(32), nullable=False)
     yMin = db.Column(db.Integer, nullable=False) 
     yMax = db.Column(db.Integer, nullable=False) 
-    inputsLimit = db.Column(db.Integer, nullable=False, default=100_000) 
+    inputsLimit = db.Column(db.Integer, nullable=False, default=100_000)
     createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
     
 
 # Helper functions
-def sort_values():
-    sorted = []
+def sort_array(arr):
+    arr.sort(key=lambda x: int(x[0]))
+    return arr
 
 def read_results(token):
     results = []
@@ -50,7 +52,7 @@ def read_results(token):
         resultsReader = csv.reader(csvfile, delimiter=',')
         for result in resultsReader:
             results.append(result)
-    return sorted(results,key=lambda l:l[0])
+    return sort_array(results)
 
 def count_answers(token):
     if not path.exists(f'results/{token}.csv'):
@@ -160,13 +162,37 @@ def show_results(token):
         creator = session.get('username') == accessedSurvey.creator)
 
 @app.route('/survey/delete/<token>', methods=['GET', 'POST'])
+def delete_survey(token):
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    if (session.get('username') != accessedSurvey.creator): # wrong user
+        return redirect('/user/login', errorCode='wrong-account')
+    if (request.method == 'GET'):
+        return render_template('delete_survey.html', survey=accessedSurvey)
+    # Delete survey
+    print(f'results/${token}.csv')
+    if os.path.exists(f'results/{token}.csv'):
+        os.remove(f'results/{token}.csv')
+    Surveys.query.filter_by(token=token).delete()
+    db.session.commit()
+
+    return redirect('/user/surveys')
+
+@app.route('/survey/download/<token>', methods=['GET', 'POST'])
+def download_results(token):    
+    if request.method == 'POST':
+        uploads = path.join(getcwd(), 'results')
+        return send_from_directory(uploads, f'{token}.csv')
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    return render_template('download_results.html', title=accessedSurvey.title)
+
+@app.route('/survey/delete-point/<token>', methods=['GET', 'POST'])
 def delete_point(token):
     if (request.method == 'GET'):
         return redirect('/')
     if (session.get('username') != Surveys.query.filter_by(token=token).first().creator): # wrong user
-        return redirect('/user/login')
-    deleteX = request.form['deleteX']
-    deleteY = request.form['deleteY']
+        return redirect('/user/login', errorCode='wrong-account')
+    deleteX = request.form.get('deleteX')
+    deleteY = request.form.get('deleteY')
     deletePoint = [deleteX, deleteY]
     print(deletePoint)
     oldData = read_results(token)
@@ -177,14 +203,6 @@ def delete_point(token):
             if line!=deletePoint:
                 writer.writerow(line)
     return redirect(f'/survey/results/{token}')
-
-@app.route('/survey/download/<token>', methods=['GET', 'POST'])
-def download_results(token):    
-    if request.method == 'POST':
-        uploads = path.join(getcwd(), 'results')
-        return send_from_directory(uploads, f'{token}.csv')
-    accessedSurvey = Surveys.query.filter_by(token=token).first()
-    return render_template('download_results.html', title=accessedSurvey.title)
 
 @app.route('/user/surveys')
 def all_surveys():
