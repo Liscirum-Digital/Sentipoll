@@ -150,10 +150,10 @@
           </div>
         </section>
         {% if creator %}
-            <form action="/survey/delete/{{survey.token}}" method="post">
+            <form id="deletionForm" method="post">
                 <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
                 <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
-                <input type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+                <button type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>Punkt löschen</button>
             </form>
         {% endif %}
         <footer class="modal-card-foot field is-grouped is-grouped-centered">
@@ -162,5 +162,23 @@
       </div>
     </div>
     {% include 'link_git.html' %}
+
+    <!--enabling data sending without refresh-->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('deletionForm');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        var formData = new FormData(form);
+
+        fetch('/survey/delete-point/{{survey.token}}', {
+          method: 'POST',
+          body: formData
+        });
+
+        setTimeout(() => {  updatePage(); }, 100); //updating serverside
+        });
+    });
+    </script>
   </body>
 </html>

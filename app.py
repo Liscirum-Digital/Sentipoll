@@ -36,14 +36,11 @@ class Surveys(db.Model):
     yName = db.Column(db.String(32), nullable=False)
     yMin = db.Column(db.Integer, nullable=False) 
     yMax = db.Column(db.Integer, nullable=False) 
-    inputsLimit = db.Column(db.Integer, nullable=False, default=100_000) 
+    inputsLimit = db.Column(db.Integer, nullable=False, default=100_000)
     createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
     
 
 # Helper functions
-def sort_values():
-    sorted = []
-
 def read_results(token):
     results = []
     with open(f'results/{token}.csv', newline='') as csvfile:
@@ -159,14 +156,14 @@ def show_results(token):
         username=session.get('username'),
         creator = session.get('username') == accessedSurvey.creator)
 
-@app.route('/survey/delete/<token>', methods=['GET', 'POST'])
+@app.route('/survey/delete-point/<token>', methods=['GET', 'POST'])
 def delete_point(token):
     if (request.method == 'GET'):
         return redirect('/')
     if (session.get('username') != Surveys.query.filter_by(token=token).first().creator): # wrong user
         return redirect('/user/login')
-    deleteX = request.form['deleteX']
-    deleteY = request.form['deleteY']
+    deleteX = request.form.get('deleteX')
+    deleteY = request.form.get('deleteY')
     deletePoint = [deleteX, deleteY]
     print(deletePoint)
     oldData = read_results(token)
