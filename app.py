@@ -42,13 +42,17 @@ class Surveys(db.Model):
     
 
 # Helper functions
+def sort_array(arr):
+    arr.sort(key=lambda x: int(x[0]))
+    return arr
+
 def read_results(token):
     results = []
     with open(f'results/{token}.csv', newline='') as csvfile:
         resultsReader = csv.reader(csvfile, delimiter=',')
         for result in resultsReader:
             results.append(result)
-    return sorted(results,key=lambda l:l[0])
+    return sort_array(results)
 
 def count_answers(token):
     if not path.exists(f'results/{token}.csv'):
