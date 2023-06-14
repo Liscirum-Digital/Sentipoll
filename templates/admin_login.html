@@ -17,7 +17,12 @@
             <p class="is-size-2-desktop is-size-3-touch dark-white">Admin-Login</p>
             <span class="is-size-5-desktop is-size-6-touch is-italic dark-white">Daten eingeben:</span>
             <form action="/admin/login" method="post">
-              <input class="input shadow schwarz dark dark-white p-5" type="text" name="adminName" id="adminName" placeholder="Admin-Name" required>
+              <div class="field">
+                <label class="label is-size-4-desktop is-size-6-touch dark-white">Name</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-5" type="text" name="adminName" id="adminName" placeholder="Admin-Name" required>
+                </div>
+              </div>
               <div class="field">
                 <label class="label is-size-4-desktop is-size-6-touch dark-white">Passwort</label>
                 <div class="control input-size">

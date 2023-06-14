@@ -2698,7 +2698,6 @@ div.icon-text {
 }
 
 .table {
-  background-color: white;
   color: #363636;
 }
 
@@ -6147,7 +6146,7 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
 .navbar-link:focus-within,
 .navbar-link:hover,
 .navbar-link.is-active {
-  background-color: #fafafa;
+  background-color: #d2e6ff;
   color: #485fc7;
 }
 
