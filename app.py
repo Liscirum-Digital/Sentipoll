@@ -1,3 +1,4 @@
+import os
 import datetime
 import csv
 from os import path, getcwd
@@ -156,12 +157,36 @@ def show_results(token):
         username=session.get('username'),
         creator = session.get('username') == accessedSurvey.creator)
 
+@app.route('/survey/delete/<token>', methods=['GET', 'POST'])
+def delete_survey(token):
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    if (session.get('username') != accessedSurvey.creator): # wrong user
+        return redirect('/user/login', errorCode='wrong-account')
+    if (request.method == 'GET'):
+        return render_template('delete_survey.html', survey=accessedSurvey)
+    # Delete survey
+    print(f'results/${token}.csv')
+    if os.path.exists(f'results/{token}.csv'):
+        os.remove(f'results/{token}.csv')
+    Surveys.query.filter_by(token=token).delete()
+    db.session.commit()
+
+    return redirect('/user/surveys')
+
+@app.route('/survey/download/<token>', methods=['GET', 'POST'])
+def download_results(token):    
+    if request.method == 'POST':
+        uploads = path.join(getcwd(), 'results')
+        return send_from_directory(uploads, f'{token}.csv')
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+    return render_template('download_results.html', title=accessedSurvey.title)
+
 @app.route('/survey/delete-point/<token>', methods=['GET', 'POST'])
 def delete_point(token):
     if (request.method == 'GET'):
         return redirect('/')
     if (session.get('username') != Surveys.query.filter_by(token=token).first().creator): # wrong user
-        return redirect('/user/login')
+        return redirect('/user/login', errorCode='wrong-account')
     deleteX = request.form.get('deleteX')
     deleteY = request.form.get('deleteY')
     deletePoint = [deleteX, deleteY]
@@ -174,14 +199,6 @@ def delete_point(token):
             if line!=deletePoint:
                 writer.writerow(line)
     return redirect(f'/survey/results/{token}')
-
-@app.route('/survey/download/<token>', methods=['GET', 'POST'])
-def download_results(token):    
-    if request.method == 'POST':
-        uploads = path.join(getcwd(), 'results')
-        return send_from_directory(uploads, f'{token}.csv')
-    accessedSurvey = Surveys.query.filter_by(token=token).first()
-    return render_template('download_results.html', title=accessedSurvey.title)
 
 @app.route('/user/surveys')
 def all_surveys():
