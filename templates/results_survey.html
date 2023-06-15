@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Turbaerit: Ergebnisse</title>
@@ -39,6 +40,12 @@
           .width {
           width: unset;
         }
+      }
+      .class-modal {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        margin: 5px;
       }
     </style>
     {% if errorCode==None %}
@@ -119,10 +126,10 @@
 
     <div class="class-modal">
       {% if creator %}
-        <form action="/survey/delete/{{survey.token}}" method="post">
-          <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
-          <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
-          <button class="button is-small is-danger" type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+      <form id="deletionForm" method="post">
+        <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
+        <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
+        <button type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>Punkt löschen</button>
             <span class="icon is-small">
               <img src="{{url_for('static', filename='5_trash.png')}}">
             </span>
@@ -186,13 +193,6 @@
             </div>
           </div>
         </section>
-        {% if creator %}
-            <form id="deletionForm" method="post">
-                <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
-                <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
-                <button type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>Punkt löschen</button>
-            </form>
-        {% endif %}
         <footer class="modal-card-foot field is-grouped is-grouped-centered">
           <a href="/survey/download/{{survey.token}}"><button class="button is-success">Download</button></a>
         </footer>

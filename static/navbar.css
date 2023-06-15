@@ -11,3 +11,6 @@ nav {
 .navbar-menu {
     background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
 }
+.nav-color {
+    color: #ffffff;
+}
