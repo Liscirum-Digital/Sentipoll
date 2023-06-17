@@ -1,5 +1,5 @@
 nav {
-    background-color: #001935;
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
         box-shadow: 0px 0px 5px 4px #a3a3a3;
     position: fixed;
     width: 100%;
@@ -9,5 +9,8 @@ nav {
     background-color: none;
 }
 .navbar-menu {
-    background-color: #001935;
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+}
+.nav-color {
+    color: #ffffff;
 }

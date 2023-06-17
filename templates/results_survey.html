@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Turbaerit: Ergebnisse</title>
     <style>
       .number-style {
-        height: 3em;
+        height: 2em;
         width: 8rem;
         border: 2px #ACE1AF;
         font-size: larger;
@@ -23,6 +24,28 @@
         width: 1.1em;
         height: 1.1em;
         border-radius: 0.25em;
+      }
+      .border {
+        border: 1px solid #a3a3a3;
+        border-radius: 5px;
+        padding: 5px;
+      }
+      @media screen and (min-width: 769px) {
+          .width {
+          width: 70%;
+          margin: 5px;
+        }
+      }
+      @media screen and (max-width: 768px) {
+          .width {
+          width: unset;
+        }
+      }
+      .class-modal {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        margin: 5px;
       }
     </style>
     {% if errorCode==None %}
@@ -35,8 +58,19 @@
     {% if username %}
       {% include 'navbar.html' %}
     {% endif %}
+    
     {% if errorCode=="noResults" %}
-      <h1>Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.</h1>
+      <div class="is-centered my-3 error-keyframe">
+        <article class="message is-danger is-medium massage-round shadow">
+          <div class="message-header">
+            <p>Turbaerit Error</p>
+            <button class="delete is-medium" aria-label="delete"></button>
+          </div>
+          <div class="message-body">
+            Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.
+          </div>
+        </article>
+      </div>
     {% endif %}
 
     <div id="chart_div"></div>
@@ -91,6 +125,17 @@
     </script>
 
     <div class="class-modal">
+      {% if creator %}
+      <form id="deletionForm" method="post">
+        <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
+        <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
+        <button type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>Punkt löschen</button>
+            <span class="icon is-small">
+              <img src="{{url_for('static', filename='5_trash.png')}}">
+            </span>
+          </button>
+        </form>
+      {% endif %}
       <button class="button is-normal js-modal-trigger" data-target="modal-js">
         <span class="icon is-small" style="width: 1rem;">
           <img src="{{url_for('static', filename='3_picture.png')}}">
@@ -98,7 +143,6 @@
         <span>Einstellungen</span>
       </button>
     </div>
-
     <div class="modal" id="modal-js">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -109,7 +153,7 @@
         <section class="modal-card-body">
           <div class="field">
             <label class="label">X-Achse einstellen:</label>
-            <div class="control box">
+            <div class="control border">
               <input class="checkbox-style" type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
               <input class="width" type="range" name="xRangeMin" id="xRangeMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
               <input class="number-style" type="number" name="xNumberMin" id="xNumberMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
@@ -119,7 +163,7 @@
           </div>
           <div class="field">
             <label class="label">Y-Achse einstellen:</label>
-            <div class="control box">
+            <div class="control border">
               <input class="checkbox-style" type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
               <input class="width" type="range" name="yRangeMin" id="yRangeMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
               <input class="number-style" type="number" name="yNumberMin" id="yNumberMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
@@ -129,7 +173,7 @@
           </div>
           <div class="field">
             <label class="label">Darstellung:</label>
-            <div class="control box">
+            <div class="control border">
               <div class="select is-normal">
                 <select name="pointShapeSelect" id="pointShapeSelect" oninput="drawChart();">
                   <option value="circle">Kreis</option>
@@ -149,18 +193,29 @@
             </div>
           </div>
         </section>
-        {% if creator %}
-            <form action="/survey/delete/{{survey.token}}" method="post">
-                <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
-                <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
-                <input type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
-            </form>
-        {% endif %}
         <footer class="modal-card-foot field is-grouped is-grouped-centered">
-          <a href="/survey/download/{{survey.token}}" target="_blank"><button class="button is-success">Download</button></a>
+          <a href="/survey/download/{{survey.token}}"><button class="button is-success">Download</button></a>
         </footer>
       </div>
     </div>
     {% include 'link_git.html' %}
+
+    <!--enabling data sending without refresh-->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('deletionForm');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        var formData = new FormData(form);
+
+        fetch('/survey/delete-point/{{survey.token}}', {
+          method: 'POST',
+          body: formData
+        });
+
+        setTimeout(() => {  updatePage(); }, 100); //updating serverside
+        });
+    });
+    </script>
   </body>
 </html>

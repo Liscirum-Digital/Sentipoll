@@ -13,11 +13,6 @@
     {% if user %}
       {% include 'navbar.html' %}
     {% endif %}
-    
-    {% if errorCode=="wrong-account" %}
-      <h1>Du kannst mit deinem Konto nicht auf diesen Inhalt zugreifen.</h1>
-    {% endif %}
-  
     <div class="container dark">
       <div class="box dark">
         <div class="columns is-mobile is-centered dark">
@@ -45,7 +40,7 @@
             </form>
           </div>
         </div>
-        {% if errorCode=="wrong-credentials" %}
+        {% if errorCode %}
           <div class="is-centered my-3 error-keyframe">
             <article class="message is-danger is-medium massage-round shadow">
                 <div class="message-header">
@@ -53,7 +48,11 @@
                   <button class="delete is-medium" aria-label="delete"></button>
                 </div>
                 <div class="message-body">
-                  Der Nutzername bzw. das Passwort ist falsch.
+                  {% if errorCode=="wrong-credentials" %}
+                    Der Nutzername bzw. das Passwort ist falsch.
+                    {% elif errorCode=="wrong-account" %}
+                    Du kannst mit deinem Konto nicht auf diesen Inhalt zugreifen.
+                  {% endif %}
                 </div>
             </article>
           </div>
