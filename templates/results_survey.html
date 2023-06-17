@@ -167,6 +167,8 @@
           body: formData
         });
 
+        document.getElementById('deleteSubmit').disabled = true;
+
         setTimeout(() => {  updatePage(); }, 100); //updating serverside
         });
     });

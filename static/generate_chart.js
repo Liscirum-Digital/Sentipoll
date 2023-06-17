@@ -36,7 +36,7 @@ function updatePage() {
   })
   .then(response => response.json())
   .then(data => {
-      if (data!=results) {
+      if (JSON.stringify(data)!=JSON.stringify(results)) {
         results = data;
         drawChart();
       }
