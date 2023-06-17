@@ -68,7 +68,7 @@ def validate_login(name, password):
 
 @app.route('/')
 def start():
-    return render_template('index.html', user=session.get('username'))
+    return render_template('index.html', user=session.get('username'), admin=session.get('admin'))
 
 @app.route('/survey/access/<token>', methods=['GET', 'POST'])
 def serve_survey(token):
@@ -77,26 +77,26 @@ def serve_survey(token):
     if request.method == 'POST':
         # adding to inputs
         if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
-            return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'))
+            return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
         session[f'{token}_inputs']+=1
         # writing results into file
         with open(f'results/{token}.csv', 'a', newline='') as csvfile:
             resultsWriter = csv.writer(csvfile, delimiter=',')
             resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
-        return render_template('success.html', token=token, topic='newResult', user=session.get('username'))
+        return render_template('success.html', token=token, topic='newResult', user=session.get('username'), admin=session.get('admin'))
 
     # getting data for page
     # set cookie
     if (not session.get(f'{token}_inputs')):
         session.permanent = True
         session[f'{token}_inputs']=0
-    return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'))
+    return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
         
 
 @app.route('/survey/new', methods=['GET', 'POST'])
 def create_survey():
     if request.method == 'GET':
-        return render_template('create_survey.html', user=session.get('username'))
+        return render_template('create_survey.html', user=session.get('username'), admin=session.get('admin'))
     if (not session.get('username')):
         return redirect('/user/login')
     # collecting data
@@ -120,7 +120,7 @@ def create_survey():
     db.session.commit()
     db.session.refresh(newSurvey)     
     open(f'results/{token}.csv', 'x') 
-    return render_template('success.html', token=token, topic='newSurvey', user=session.get('username')) 
+    return render_template('success.html', token=token, topic='newSurvey', user=session.get('username'), admin=session.get('admin')) 
 
 @app.route('/survey/edit/<token>', methods=['GET', 'POST'])
 def edit_survey(token):
@@ -128,7 +128,7 @@ def edit_survey(token):
     if (accessedSurvey.creator != session.get('username')):
         return redirect('/user/login', errorCode='wrong-account')
     if request.method == 'GET':
-        return render_template('edit_survey.html', survey=accessedSurvey, user=session.get('username'))
+        return render_template('edit_survey.html', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
 
     #making database entry
     accessedSurvey.title=request.form['title']
@@ -140,7 +140,7 @@ def edit_survey(token):
     accessedSurvey.yMax=request.form['yMax'] 
     accessedSurvey.inputsLimit=request.form['inputsLimit']
     db.session.commit()  
-    return render_template('success.html', token=token, topic='editSurvey', user=session.get('username')) 
+    return render_template('success.html', token=token, topic='editSurvey', user=session.get('username'), admin=session.get('admin')) 
     
     
 
@@ -167,7 +167,7 @@ def delete_survey(token):
     if (session.get('username') != accessedSurvey.creator): # wrong user
         return redirect('/user/login', errorCode='wrong-account')
     if (request.method == 'GET'):
-        return render_template('delete_survey.html', survey=accessedSurvey)
+        return render_template('delete_survey.html', survey=accessedSurvey, admin=session.get('admin'))
     # Delete survey
     print(f'results/${token}.csv')
     if os.path.exists(f'results/{token}.csv'):
@@ -183,7 +183,7 @@ def download_results(token):
         uploads = path.join(getcwd(), 'results')
         return send_from_directory(uploads, f'{token}.csv')
     accessedSurvey = Surveys.query.filter_by(token=token).first()
-    return render_template('download_results.html', title=accessedSurvey.title, user=session.get('username'))
+    return render_template('download_results.html', title=accessedSurvey.title, user=session.get('username'), admin=session.get('admin'))
 
 @app.route('/survey/delete-point/<token>', methods=['GET', 'POST'])
 def delete_point(token):
@@ -218,7 +218,7 @@ def all_surveys():
         survey['answerCount'] = count_answers(surveyEntry.token)
         survey['token'] = surveyEntry.token
         surveys.append(survey)
-    return render_template('manage_surveys.html', surveys=surveys)
+    return render_template('manage_surveys.html', surveys=surveys, admin=session.get('admin'))
 
 @app.route('/update/<token>', methods=['GET'])
 def update_results(token):
@@ -237,40 +237,40 @@ def login_user():
         return render_template('user_login.html', errorCode='wrong-credentials')
     session.permanent = True
     session['username'] = request.form['username']
-    return render_template('success.html', topic='login', user=session.get('username'))
+    return render_template('success.html', topic='login', user=session.get('username'), admin=session.get('admin'))
    
 @app.route('/user/logout', methods=['GET', 'POST'])
 def logout_user():
     if (not session.get('username')):
         return redirect('/user/login')
     if (request.method=='GET'):
-        return render_template('user_logout.html', user=session.get('username'))
+        return render_template('user_logout.html', user=session.get('username'), admin=session.get('admin'))
     session.pop('username')
     if session.get('admin'):
         session.pop('admin')
-    return render_template('success.html', topic='logout', user=session.get('username'))
+    return render_template('success.html', topic='logout', user=session.get('username'), admin=session.get('admin'))
     
 @app.route('/user/new', methods=['GET', 'POST'])
 def create_user():
     if (not session.get('admin')):
         return redirect('/admin/login')
     if (request.method=='GET'):
-        return render_template('user_create.html')
+        return render_template('user_create.html', admin=session.get('admin'))
     newUser = Users(name=request.form['username'], password=bcrypt.generate_password_hash(request.form['userPassword']))
     db.session.add(newUser)
     db.session.commit()
     db.session.refresh(newUser)   
-    return render_template('success.html', topic='newUser', user=session.get('username'))
+    return render_template('success.html', topic='newUser', user=session.get('username'), admin=session.get('admin'))
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_user():
     if (request.method=='GET'):
-        return render_template('admin_login.html', user=session.get('username'))
+        return render_template('admin_login.html', user=session.get('username'), admin=session.get('admin'))
     if (request.form['adminPassword'] != ADMIN_PASSWORD or request.form['adminName'] != ADMIN_NAME):
-        return render_template('admin_login.html', errorCode='wrong-credentials', user=session.get('username'))
+        return render_template('admin_login.html', errorCode='wrong-credentials', user=session.get('username'), admin=session.get('admin'))
     session.permanent = True
     session['admin'] = True
     if (not session.get('username')):
         session['username'] = 'Admin'
-    return render_template('success.html', topic='admin-login', user=session.get('username'))
+    return render_template('success.html', topic='admin-login', user=session.get('username'), admin=session.get('admin'))
     
