@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
-
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Turbaerit: Ergebnisse</title>
@@ -77,64 +76,19 @@
   
     <input type="text" id="token" value="{{survey.token}}" hidden>
     <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>
-    <script>
-          document.addEventListener('DOMContentLoaded', () => {
-        // Functions to open and close a modal
-        function openModal($el) {
-          $el.classList.add('is-active');
-        }
-      
-        function closeModal($el) {
-          $el.classList.remove('is-active');
-        }
-      
-        function closeAllModals() {
-          (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-            closeModal($modal);
-          });
-        }
-      
-        // Add a click event on buttons to open a specific modal
-        (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-          const modal = $trigger.dataset.target;
-          const $target = document.getElementById(modal);
-      
-          $trigger.addEventListener('click', () => {
-            openModal($target);
-          });
-        });
-      
-        // Add a click event on various child elements to close the parent modal
-        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-          const $target = $close.closest('.modal');
-      
-          $close.addEventListener('click', () => {
-            closeModal($target);
-          });
-        });
-      
-        // Add a keyboard event to close all modals
-        document.addEventListener('keydown', (event) => {
-          const e = event || window.event;
-      
-          if (e.keyCode === 27) { // Escape key
-            closeAllModals();
-          }
-        });
-      });
-    </script>
+    <script src="{{url_for('static', filename='results_modal.js')}}"></script>
 
     <div class="class-modal">
       {% if creator %}
       <form id="deletionForm" method="post">
         <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
         <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
-        <button type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>Punkt löschen</button>
-            <span class="icon is-small">
-              <img src="{{url_for('static', filename='5_trash.png')}}">
-            </span>
-          </button>
-        </form>
+        <button class="button is-small is-danger" type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+          <span class="icon is-small">
+            <img src="{{url_for('static', filename='5_trash.png')}}">
+          </span>
+        </button>
+      </form>
       {% endif %}
       <button class="button is-normal js-modal-trigger" data-target="modal-js">
         <span class="icon is-small" style="width: 1rem;">

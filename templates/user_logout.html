@@ -7,9 +7,12 @@
         <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
         <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+        <script src="{{url_for('static', filename='nav.js')}}"></script>
         <title>Turbaerit: Logout</title>
     </head>
     <body>
+        {% include 'navbar.html' %}
         <div class="container dark">
             <div class="box dark">
                 <div class="columns is-mobile is-centered dark">
@@ -23,6 +26,6 @@
                 </div>
             </div>
         </div>
-
+        {% include 'link_git.html' %}
     </body>
 </html>
