@@ -183,7 +183,7 @@ def download_results(token):
         uploads = path.join(getcwd(), 'results')
         return send_from_directory(uploads, f'{token}.csv')
     accessedSurvey = Surveys.query.filter_by(token=token).first()
-    return render_template('download_results.html', title=accessedSurvey.title)
+    return render_template('download_results.html', title=accessedSurvey.title, user=session.get('username'))
 
 @app.route('/survey/delete-point/<token>', methods=['GET', 'POST'])
 def delete_point(token):
@@ -244,7 +244,7 @@ def logout_user():
     if (not session.get('username')):
         return redirect('/user/login')
     if (request.method=='GET'):
-        return render_template('user_logout.html')
+        return render_template('user_logout.html', user=session.get('username'))
     session.pop('username')
     if session.get('admin'):
         session.pop('admin')
