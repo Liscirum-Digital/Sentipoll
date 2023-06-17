@@ -228,11 +228,13 @@ def update_results(token):
 
 @app.route('/user/login', methods=['GET', 'POST'])
 def login_user():
+    if (session.get('user')):
+        return redirect('/user/logout')
     if (request.method=='GET'):
-        return render_template('user_login.html', user=session.get('username'))
+        return render_template('user_login.html')
     valid = validate_login(request.form['username'], request.form['userPassword'])
     if not valid:
-        return render_template('user_login.html', errorCode='wrong-credentials', user=session.get('username'))
+        return render_template('user_login.html', errorCode='wrong-credentials')
     session.permanent = True
     session['username'] = request.form['username']
     return render_template('success.html', topic='login', user=session.get('username'))
