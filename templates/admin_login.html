@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
     <script src="{{url_for('static', filename='nav.js')}}"></script>
-    <title>Tubaerit: Admin Login</title>
+    <title>Tubaerit: Admin-Login</title>
   </head>
   <body>
     {% if user %}

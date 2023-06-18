@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <title>Tubaerit: Login</title>
   </head>

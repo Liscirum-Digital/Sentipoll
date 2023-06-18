@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Umfrage: Bearbeiten</title>
