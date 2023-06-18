@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+        <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+        {% if admin %}
+            <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+        {% endif %}
+        <script src="{{url_for('static', filename='nav.js')}}"></script>
+        <title>Sentipoll: Logout</title>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="container dark">
+            <div class="box dark">
+                <div class="columns is-mobile is-centered dark">
+                    <div class="column has-text-centered-tablet acess-padding dark">
+                        <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Möchten Sie sich ausloggen?</p>
+                        <form action="" method="post">
+                            <button class="button is-medium is-responsive shadow" type="submit">Sehr gerne!</button>
+                            <button class="button is-medium is-responsive shadow" type="button" onclick="javascript:window.history.back();">Zurück</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'link_git.html' %}
+    </body>
+</html>

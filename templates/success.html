@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="de">
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Erfolg</title>
-</head>
-<body>
-    <h1>Daten erfolgreich abgesendet.</h1>
-</body>
+  </head>
+  <body>
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            {% if topic=="login" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Sie wurden erfolgreich eingeloggt!</p>
+            {% elif topic=="logout" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Sie wurden erfolgreich ausgeloggt.</p>
+              <a class="button is-medium is-responsive shadow submit-button" href="/">
+                <span>Home</span>
+              </a>
+            {% elif topic=="admin-login" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Sie wurden erfolgreich als Admin eingeloggt!</p>
+            {% elif topic=="newUser" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Der Nutzer wurde erstellt.</p>
+              <a class="button is-medium is-responsive shadow submit-button" href="/user/login">
+                <span>Einloggen</span>
+              </a>
+            {% elif topic=="newSurvey" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Umfrage wurde erstellt.</p>
+              Token: {{token}} (<a href="/survey/access/{{token}}">Link</a>)
+            {% elif topic=="editSurvey" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Umfrage wurde bearbeitet.</p>
+              Token: {{token}} (<a href="/survey/access/{{token}}">Link</a>)
+            {% elif topic=="newResult" %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Daten wurden übermittelt.</p>
+              <a class="button is-medium is-responsive shadow submit-button" href="/survey/access/{{token}}">
+                <span>Neue Eingabe</span>
+              </a>
+              <a class="button is-medium is-responsive shadow submit-button" href="/survey/results/{{token}}">
+                <span>Ergebnisse anzeigen</span>
+              </a>
+            {% else %}
+              <p class="is-size-2-desktop is-size-3-touch dark-white">Die Aktion wurde erfolgreich durchgeführt.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>

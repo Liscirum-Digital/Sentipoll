@@ -1,3 +1,4 @@
+#!/bin/bash
 python -m venv venv
 if [ $1 == "--w" ]
 then

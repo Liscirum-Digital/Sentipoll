@@ -1,0 +1,36 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img src="{{url_for('static', filename='logo_1.png')}}" width="28" height="28">
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-mobile">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navbar-mobile" class="navbar-menu navbar-animation">
+      <div class="navbar-start">
+        <div class="navbar-item">
+          {% if admin %}
+          <a class="navbar-item is-size-4-desktop is-size-5-touch nav-color" href="/user/new">
+            Benutzererstellung
+          </a>
+          {% endif %}
+          <a class="navbar-item is-size-4-desktop is-size-5-touch nav-color" href="/user/surveys">
+            Umfragen verwalten
+          </a>
+          <a class="navbar-item is-size-4-desktop is-size-5-touch nav-color" href="/survey/new">
+            Umfragen erstellen
+          </a>
+        </div>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <a class="navbar-item is-size-4-desktop is-size-5-touch nav-color" href="/user/logout">
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+</nav>

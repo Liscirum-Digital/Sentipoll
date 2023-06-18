@@ -4,26 +4,211 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ergebnisse</title>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="../static/generate_charts.js"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <title>Umfrage: Ergebnisse</title>
+    <style>
+      .number-style {
+        height: 2em;
+        width: 8rem;
+        border: 2px #ACE1AF;
+        font-size: larger;
+      }
+      .checkbox-style {
+        background-color: #fff;
+        border: 2px solid rgba(0,0,0,.25);
+        width: 1.1em;
+        height: 1.1em;
+        border-radius: 0.25em;
+      }
+      .border {
+        border: 1px solid #a3a3a3;
+        border-radius: 5px;
+        padding: 5px;
+      }
+      @media screen and (min-width: 769px) {
+          .width {
+          width: 70%;
+          margin: 5px;
+        }
+      }
+      @media screen and (max-width: 768px) {
+          .width {
+          width: unset;
+        }
+      }
+      .class-modal {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        margin: 5px;
+      }
+      .padding-trash_modal {
+        padding-left: 150px;
+      }
+      .columns:not(.is-desktop) {
+        align-items: center;
+      }
+    </style>
+    {% if errorCode==None %}
+      <script type="text/javascript" src="{{url_for('static', filename='google_loader.js')}}"></script>
+      <script type="text/javascript" src="{{url_for('static', filename='generate_chart.js')}}"></script>
+    {% endif %}
   </head>
 
   <body style="min-height: 100%;">
-    <div id="chart_div" style="width: 100%; height: 100%;"></div>
-    x-Achse einstellen:
-    <input type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-    <input type="range" name="xRangeMin" id="xRangeMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.001" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> <input type="number" name="xNumberMin" id="xNumberMin" min="{{xMin}}" max="{{xMax}}" value="{{xMin}}" step="0.001" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
-    <input type="range" name="xRangeMax" id="xRangeMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.001" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> <input type="number" name="xNumberMax" id="xNumberMax" min="{{xMin}}" max="{{xMax}}" value="{{xMax}}" step="0.001" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
-    y-Achse einstellen:
-    <input type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
-    <input type="range" name="yRangeMin" id="yRangeMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" step="0.001" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> <input type="number" name="yNumberMin" id="yNumberMin" min="{{yMin}}" max="{{yMax}}" value="{{yMin}}" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
-    <input type="range" name="yRangeMax" id="yRangeMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" step="0.001" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> <input type="number" name="yNumberMax" id="yNumberMax" min="{{yMin}}" max="{{yMax}}" value="{{yMax}}" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
+    {% if username %}
+      {% include 'navbar.html' %}
+    {% endif %}
     
+    {% if errorCode=="noResults" %}
+      <div class="is-centered my-3 error-keyframe">
+        <article class="message is-danger is-medium massage-round shadow">
+          <div class="message-header">
+            <p>Sentipoll Error</p>
+            <button class="delete is-medium" aria-label="delete" onclick="this.parentElement.parentElement.style.display='none'"></button>
+          </div>
+          <div class="message-body">
+            Es gibt noch keine anzeigbaren Ergebnisse. Nach Eingabe der ersten Messdaten kann die Seite neugeladen werden.
+          </div>
+        </article>
+      </div>
+    {% endif %}
 
+    <div id="chart_div"></div>
+  
+    <input type="text" id="token" value="{{survey.token}}" hidden>
+    <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>
+    <script src="{{url_for('static', filename='results_modal.js')}}"></script>
 
-    <input type="text" id="token" value="{{token}}" hidden>
-    <script>init('{{title}}', '{{xName}}', '{{yName}}')</script>
-</body>
+    <div class="class-modal padding-trash_modal">
+      {% if creator %}
+      <form id="deletionForm" method="post">
+        <input type="number" name="deleteX" id="deleteX" min="{{survey.xMin}}" max="{{survey.xMax}}" value="0" step="0.01" hidden>
+        <input type="number" name="deleteY" id="deleteY" min="{{survey.yMin}}" max="{{survey.yMax}}" value="0" step="0.01" hidden>
+        <button class="button is-normal is-danger" type="submit" name="deleteSubmit" id="deleteSubmit" value="Punkt löschen" disabled>
+          <span class="icon is-normal">
+            <img src="{{url_for('static', filename='5_trash.png')}}">
+          </span>
+        </button>
+      </form>
+      {% endif %}
+    </div>
+    <div class="class-modal">
+      <button class="button is-normal js-modal-trigger" data-target="modal-js">
+        <span class="icon is-small" style="width: 1rem;">
+          <img src="{{url_for('static', filename='3_picture.png')}}">
+        </span>
+        <span>Einstellungen</span>
+      </button>
+    </div>
+
+    <div class="modal" id="modal-js">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Einstellungen</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">X-Achse einstellen:</label>
+            <div class="control border text-center">
+              <input class="checkbox-style" type="checkbox" name="xLog" id="xLog" oninput="drawChart()"> Logarithmisch skalieren <br>
+              <input class="width" type="range" name="xRangeMin" id="xRangeMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xNumberMin').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="xNumberMin" id="xNumberMin" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMin}}" step="0.01" oninput="document.getElementById('xRangeMin').value=this.value;"> <br>
+              <input class="width" type="range" name="xRangeMax" id="xRangeMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xNumberMax').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="xNumberMax" id="xNumberMax" min="{{survey.xMin}}" max="{{survey.xMax}}" value="{{survey.xMax}}" step="0.01" oninput="document.getElementById('xRangeMax').value=this.value;"> <br>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Y-Achse einstellen:</label>
+            <div class="control border text-center">
+              <input class="checkbox-style" type="checkbox" name="xyLog" id="yLog" oninput="drawChart()"> Logarithmisch skalieren <br>
+              <input class="width" type="range" name="yRangeMin" id="yRangeMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yNumberMin').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="yNumberMin" id="yNumberMin" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMin}}" step="0.01" oninput="document.getElementById('yRangeMin').value=this.value;"> <br>
+              <input class="width" type="range" name="yRangeMax" id="yRangeMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yNumberMax').value = this.value; drawChart();"> 
+              <input class="number-style" type="number" name="yNumberMax" id="yNumberMax" min="{{survey.yMin}}" max="{{survey.yMax}}" value="{{survey.yMax}}" step="0.01" oninput="document.getElementById('yRangeMax').value=this.value;"> <br>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Darstellung:</label>
+            <div class="control border text-center">
+              <div class="column is-half is-offset-2 m-auto">
+                <div class="columns is-mobile">
+                  <div class="column">
+                    <div class="select is-normal">
+                      <select name="pointShapeSelect" id="pointShapeSelect" oninput="drawChart();">
+                        <option value="circle">Kreis</option>
+                        <option value="cross">Kreuz</option>
+                        <option value="triangle">Dreieck</option>
+                        <option value="square">Quadrat</option>
+                        <option value="diamond">Raute</option>
+                        <option value="star">Stern</option>
+                        <option value="polygon">Fünfeck</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <input class="checkbox-style" type="checkbox" name="lineChart" id="lineChart" oninput="drawChart()">
+                    <i>Punkte verbinden</i>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-half is-offset-2 m-auto">
+                <div class="columns is-mobile">
+                  <div class="column">
+                    <input class="number-style" type="number" name="fontSize" id="fontSize" oninput="drawChart()" value="20">
+                  </div>
+                  <div class="column">
+                    <p class="bd-notification is-info">Schriftgröße</p>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-half is-offset-2 m-auto">
+                <div class="columns is-mobile">
+                  <div class="column">
+                    <input class="number-style" type="number" name="pointSize" id="pointSize" oninput="drawChart()" value="10">
+                  </div>
+                  <div class="column">
+                    <p class="bd-notification is-info">Symbolgröße</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot field is-grouped is-grouped-centered">
+          <a href="/survey/download/{{survey.token}}"><button class="button is-success">Download</button></a>
+        </footer>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+
+    <!--enabling data sending without refresh-->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('deletionForm');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        var formData = new FormData(form);
+
+        fetch('/survey/delete-point/{{survey.token}}', {
+          method: 'POST',
+          body: formData
+        });
+
+        document.getElementById('deleteSubmit').disabled = true;
+
+        setTimeout(() => {  updatePage(); }, 100); //updating serverside
+        });
+    });
+    </script>
+  </body>
 </html>

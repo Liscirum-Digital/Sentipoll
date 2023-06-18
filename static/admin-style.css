@@ -1,0 +1,8 @@
+nav {
+    background: rgb(180,52,238);
+    background: linear-gradient(90deg, rgba(180,52,238,1) 0%, rgba(130,0,122,1) 70%, rgba(74,0,67,1) 100%);
+}
+.navbar-menu {
+    background: rgb(180,52,238);
+    background: linear-gradient(90deg, rgba(180,52,238,1) 0%, rgba(130,0,122,1) 70%, rgba(74,0,67,1) 100%);
+}

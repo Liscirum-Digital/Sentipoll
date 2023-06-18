@@ -4,31 +4,97 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tubaerit: Survey-Manager</title>
-</head>
-<body>
-    <h1>Erstellte Umfragen</h1>
-    <table style="border: 1px solid black;">
-        <tr>
-            <th>Titel</th>
-            <th>Antworten</th>
-            <th>Token</th>
-            <th>Teilnahme</th>
-            <th>Ergebnisse</th>
-        </tr>
-        {% for survey in surveys %}
-        <tr>
-            <th>{{survey.title}}</th>
-            <th>{{survey.answerCount}}</th>
-            <th>{{survey.token}}</th>
-            <th><a href="/survey/access/{{survey.token}}" target="_blank">/access/{{survey.token}}</a></th>
-            <th><a href="/survey/results/{{survey.token}}" target="_blank">/results/{{survey.token}}</a></th>
-            <th></th>
-        </tr>
-
-        {%endfor%}
-    </table>
-    
-        
-</body>
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <title>Tubaerit: Umfragen-Manager</title>
+    <style>
+      @media only screen and (min-width: 1201px) {
+          .overflow-mobile {
+              overflow-x: auto;
+              table-layout: fixed;
+          }
+      }
+      @media only screen and (max-width: 1200px) {
+          .overflow-mobile {
+              overflow-x: scroll;
+          }
+      }
+      .table { 
+        overflow-y: hidden;
+      } 
+      .border-table_one {
+        border-right: 1px solid rgb(187, 187, 187);
+        border-left: none;
+        border-top: none;
+        border-bottom: 2px solid rgb(97, 97, 97);
+      }
+      .border-table_two {
+        border-right: none;
+        border-left: none;
+        border-top: none;
+        border-bottom: 2px solid rgb(97, 97, 97);
+      }
+      .border-table_three {
+        border-right: 1px solid rgb(187, 187, 187);
+        border-left: none;
+        border-top: none;
+        border-bottom: 1px solid rgb(187, 187, 187);
+      }
+      .border-table_four {
+        border-right: none;
+        border-left: none;
+        border-top: none;
+        border-bottom: 1px solid rgb(187, 187, 187);
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container dark">
+      <div class="columns is-mobile is-centered dark p-2">
+        <div class="column has-text-centered-tablet acess-padding dark">
+          <p class="is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Umfragen</p>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth overflow-mobile">
+              <thead>
+                <tr>
+                  <th style="width: 20%;" class="border-table_one">Titel</th>
+                  <th style="width: 10%;" class="border-table_one">Antworten</th>
+                  <th style="width: 10%;" class="border-table_one">Token</th>
+                  <th style="width: 10%;" class="border-table_two">Optionen</th>
+                  <th style="width: 10%;" class="border-table_two"></th>
+                  <th style="width: 10%;" class="border-table_two"></th>
+                  <th style="width: 10%;" class="border-table_two"></th>
+                  <th style="width: 10%;" class="border-table_two"></th>
+                </tr>
+              </thead>
+              {% for survey in surveys %}
+              <tbody>
+                <tr>
+                  <th class="border-table_three">{{survey.title}}</th>
+                  <th class="border-table_three">{{survey.answerCount}}</th>
+                  <th class="border-table_three">{{survey.token}}</th>
+                  <th class="border-table_four"><a href="/survey/access/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow">Werteeingabe</button></a></th>
+                  <th class="border-table_four"><a href="/survey/results/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow">Ergebnisse</button></a></th>
+                  <th class="border-table_four"><a href="/survey/download/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow is-success">Download</button></th>
+                  <th class="border-table_four"><a href="/survey/edit/{{survey.token}}" target="_blank"><button class="button is-small is-responsive shadow">Bearbeiten</button></a></th>
+                  <th class="border-table_four"><a href="/survey/delete/{{survey.token}}"><button class="button is-small is-responsive shadow is-danger">Löschen</button></th>
+                </tr>
+              </tbody>
+              {%endfor%}
+            </table>
+          </div>
+          <hr style="margin: 15px;">
+          <a href="/survey/new"><button class="button is-medium is-responsive shadow">Neue Survey erstellen</button></a>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>

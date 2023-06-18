@@ -1,13 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="de">
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
     <title>Tubaerit: Start</title>
-</head>
-<body>
-    <h1>Herzlich willkommen bei Tubaerit!</h1>
-    Ich bin ein Text und ich bin sehr cool :D
-</body>
+  </head>
+  <body>
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}    
+    <div class="container dark p-5 mt-4">
+      <div class="columns is-mobile is-centered dark">
+        <div class="column has-text-centered-tablet acess-padding dark">
+          <div>
+            <h1 class="title is-size-2-desktop is-size-3-touch">Herzlich willkommen bei Tubaerit!</h1>
+            <h2 class="subtitle is-size-3-desktop is-size-4-touch">Das Projekt wird von Liscirum Digital für den interaktiven Physik-Unterricht entwickelt.</h2>
+            <p class="is-size-5-desktop is-size-6-touch">
+              Tubaerit ist ein Open-Source-Tool, mit dem Daten von lokalen Gruppen gesammelt werden können. <br><br>
+
+              Nach der Erstellung einer Umfrage können die Benutzer auf eine einfache Webschnittstelle zugreifen und Messdaten bereitstellen. <br>
+              Die gesammelten Informationen werden in einem Diagramm dargestellt, können aber auch in eine CSV-Datei exportiert werden. <br><br>
+
+              Sentipoll wird in erster Linie für den Einsatz im naturwissenschaftlichen Unterricht entwickelt. Die Ergebnisse von durchgeführten Experimenten können gesammelt und visualisiert werden, wodurch die Daten leichter zu analysieren sind. <br><br>
+              Das Projekt kann den Unterricht interaktiver gestalten und ermöglicht die Zusammenarbeit, um große Datensätze zu erhalten. Sentipoll ist außerdem mit verschiedenen Sicherheitsmaßnahmen ausgestattet, um Trolling und Verfälschung der Ergebnisse zu verhindern. <br>
+            </p>
+          </div>
+          <hr style="margin: 15px;">
+          <a href="/user/login"><button class="button is-medium is-responsive shadow">Login</button></a>
+          <a href="/admin/login"><button class="button is-medium is-responsive shadow">Admin-Login</button></a> 
+          <br><br>
+          {% if logo_index == 1%}
+            <img src="{{url_for('static', filename='logo_1.png')}}" alt="logo" width="200px" height="200px">
+          {% else %}
+            <img src="{{url_for('static', filename='logo_2.gif')}}" alt="logo" width="200px" height="200px">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
 </html>
