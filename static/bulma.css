@@ -2703,8 +2703,6 @@ div.icon-text {
 
 .table td,
 .table th {
-  border: 1px solid #dbdbdb;
-  border-width: 0 0 1px;
   padding: 0.5em 0.75em;
   vertical-align: top;
 }
@@ -6139,15 +6137,6 @@ body.has-navbar-fixed-bottom {
 a.navbar-item,
 .navbar-link {
   cursor: pointer;
-}
-
-a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-item.is-active,
-.navbar-link:focus,
-.navbar-link:focus-within,
-.navbar-link:hover,
-.navbar-link.is-active {
-  background-color: #d2e6ff;
-  color: #485fc7;
 }
 
 .navbar-item {
