@@ -43,7 +43,7 @@ class Surveys(db.Model):
 
 # Helper functions
 def sort_array(arr):
-    arr.sort(key=lambda x: int(x[0]))
+    arr.sort(key=lambda x: float(x[0]))
     return arr
 
 def read_results(token):
