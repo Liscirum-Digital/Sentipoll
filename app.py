@@ -1,6 +1,7 @@
 import os
 import datetime
 import csv
+import random
 from os import path, getcwd
 from flask import Flask, render_template, jsonify, redirect, request, make_response, session, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
@@ -68,7 +69,10 @@ def validate_login(name, password):
 
 @app.route('/')
 def start():
-    return render_template('index.html', user=session.get('username'), admin=session.get('admin'))
+    logo_index = 1
+    if (random.randint(1,200)==1):
+        logo_index=2
+    return render_template('index.html', user=session.get('username'), admin=session.get('admin'), logo_index=logo_index)
 
 @app.route('/survey/access/<token>', methods=['GET', 'POST'])
 def serve_survey(token):

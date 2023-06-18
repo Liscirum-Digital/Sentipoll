@@ -36,9 +36,13 @@
           </div>
           <hr style="margin: 15px;">
           <a href="/user/login"><button class="button is-medium is-responsive shadow">Login</button></a>
-          <a href="/admin/login"><button class="button is-medium is-responsive shadow">Admin login</button></a> 
+          <a href="/admin/login"><button class="button is-medium is-responsive shadow">Admin-Login</button></a> 
           <br><br>
-          <img src="{{url_for('static', filename='logo_1.png')}}" alt="logo" width="200px" height="200px">
+          {% if logo_index == 1%}
+            <img src="{{url_for('static', filename='logo_1.png')}}" alt="logo" width="200px" height="200px">
+          {% else %}
+            <img src="{{url_for('static', filename='logo_2.gif')}}" alt="logo" width="200px" height="200px">
+          {% endif %}
         </div>
       </div>
     </div>
