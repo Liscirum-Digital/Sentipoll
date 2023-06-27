@@ -38,7 +38,7 @@ class Surveys(db.Model):
     yName = db.Column(db.String(32), nullable=False)
     yMin = db.Column(db.Integer, nullable=False) 
     yMax = db.Column(db.Integer, nullable=False) 
-    inputsLimit = db.Column(db.Integer, nullable=False, default=100_000)
+    inputsLimit = db.Column(db.Integer, nullable=False)
     createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
     
 
@@ -107,6 +107,10 @@ def create_survey():
     token = tubaerit_utils.generateToken(8)
     while (Surveys.query.filter_by(token=token).first()):
         token = tubaerit_utils.generateToken(8) # making sure the token isnt already used
+    
+    iLimit = 2_147_483_647
+    if (request.form['inputsLimit']):
+        iLimit=request.form['inputsLimit']
 
     # making database entry
     newSurvey = Surveys(
@@ -119,7 +123,7 @@ def create_survey():
         yName=request.form['yName'], 
         yMin=request.form['yMin'], 
         yMax=request.form['yMax'], 
-        inputsLimit=request.form['inputsLimit'])
+        inputsLimit=iLimit)
     db.session.add(newSurvey)
     db.session.commit()
     db.session.refresh(newSurvey)     
@@ -141,8 +145,10 @@ def edit_survey(token):
     accessedSurvey.xMax=request.form['xMax']
     accessedSurvey.yName=request.form['yName']
     accessedSurvey.yMin=request.form['yMin']
-    accessedSurvey.yMax=request.form['yMax'] 
-    accessedSurvey.inputsLimit=request.form['inputsLimit']
+    accessedSurvey.yMax=request.form['yMax']
+    accessedSurvey.inputsLimit = 2_147_483_647
+    if (request.form['inputsLimit']):
+        accessedSurvey.inputsLimit=request.form['inputsLimit']
     db.session.commit()  
     return render_template('success.html', token=token, topic='editSurvey', user=session.get('username'), admin=session.get('admin')) 
     
