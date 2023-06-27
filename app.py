@@ -238,7 +238,7 @@ def update_results(token):
 
 @app.route('/user/login', methods=['GET', 'POST'])
 def login_user():
-    if (session.get('user')):
+    if (session.get('username')):
         return redirect('/user/logout')
     if (request.method=='GET'):
         return render_template('user_login.html')
