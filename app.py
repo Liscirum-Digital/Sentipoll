@@ -160,14 +160,10 @@ def show_results(token):
     accessedSurvey = Surveys.query.filter_by(token=token).first()
     # getting results
     gatheredData = read_results(token)
-    error = None
-    if len(gatheredData)==0:
-        error='noResults'
     return render_template(
         'results_survey.html',
         survey=accessedSurvey, 
         data=jsonify(gatheredData),
-        errorCode=error,
         username=session.get('username'),
         creator = session.get('username') == accessedSurvey.creator)
 

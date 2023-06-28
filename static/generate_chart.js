@@ -64,6 +64,10 @@ function drawChart() {
     userPointShape = document.getElementById('pointShapeSelect').value;
   }
 
+  if (results.length == 0) {
+    data.push([document.getElementById('xNumberMin').value-2, document.getElementById('yNumberMin').value-2]);
+  }
+
   for (var i = 0; i < results.length; i++) {
       result = [parseFloat(results[i][0]), parseFloat(results[i][1])]
       data.push(result);
