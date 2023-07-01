@@ -56,10 +56,8 @@
         align-items: center;
       }
     </style>
-    {% if errorCode==None %}
-      <script type="text/javascript" src="{{url_for('static', filename='google_loader.js')}}"></script>
-      <script type="text/javascript" src="{{url_for('static', filename='generate_chart.js')}}"></script>
-    {% endif %}
+    <script type="text/javascript" src="{{url_for('static', filename='google_loader.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='generate_chart.js')}}"></script>
   </head>
 
   <body style="min-height: 100%;">

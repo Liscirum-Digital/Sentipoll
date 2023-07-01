@@ -15,6 +15,7 @@ app.config['SECRET_KEY'] = 'REPLACE'
 ADMIN_NAME = 'EDIT'
 ADMIN_PASSWORD = 'CHANGE'
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 bcrypt = Bcrypt()
 
