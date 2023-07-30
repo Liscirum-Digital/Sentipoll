@@ -79,7 +79,7 @@
       </div>
     {% endif %}
 
-    <div id="chart_div"></div>
+    <div id="chart_div" style="position: absolute; height: 100%; width: 100%; padding: 20px;"></div>
   
     <input type="text" id="token" value="{{survey.token}}" hidden>
     <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>

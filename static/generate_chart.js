@@ -112,10 +112,8 @@ function drawChart() {
     },
     pointSize: document.getElementById('pointSize').value,
     pointShape: userPointShape,
-    width: '2000',
-    height: '860',
     legend: 'none',
-    chartArea:{left:100,top:100,bottom:100,width:"89%",height:"100%"}
+    chartArea:{left:100,top:100,bottom:100,right:20,width:"100%",height:"100%"}
   };
 
   if (document.getElementById('lineChart').checked) {
@@ -138,3 +136,5 @@ function drawChart() {
 
   chart.draw(chartData, options);
 }
+
+window.onresize = drawChart;
