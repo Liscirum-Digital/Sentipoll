@@ -4,6 +4,8 @@ var xName = ""
 var yName = ""
 var coordinates = [0, 0]
 
+var chartDiv = document.getElementById("chart_div")
+
 
 function init(surveyTitle, x, y) {
   google.charts.load('current', {'packages':['corechart']});
@@ -117,10 +119,10 @@ function drawChart() {
   };
 
   if (document.getElementById('lineChart').checked) {
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.LineChart(chartDiv);
   }
   else {
-    var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.ScatterChart(chartDiv);
   }
 
   function selectHandler() {
@@ -134,6 +136,12 @@ function drawChart() {
 
   google.visualization.events.addListener(chart, 'select', selectHandler);  
 
+  if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+    chartDiv.style.padding = "0px";
+  }
+  else {
+    chartDiv.style.padding = "20px";
+  }
   chart.draw(chartData, options);
 }
 

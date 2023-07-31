@@ -79,7 +79,30 @@
       </div>
     {% endif %}
 
+    
+
+    <button onclick="openFullscreen();">Fullscreen Mode</button>
     <div id="chart_div" style="position: absolute; height: 100%; width: 100%; padding: 20px;"></div>
+    <script>
+      var chartDiv = document.getElementById("chart_div");
+    
+      function openFullscreen() {
+        if (chartDiv.requestFullscreen) {
+          chartDiv.requestFullscreen();
+        } else if (chartDiv.webkitRequestFullscreen) { // Safari
+          chartDiv.webkitRequestFullscreen();
+        } else if (chartDiv.msRequestFullscreen) { // IE11
+          chartDiv.msRequestFullscreen();
+        }
+
+        chartDiv.style.padding = "0px";
+      }
+
+      
+      </script>
+      <br>
+      <br>
+      <br>
   
     <input type="text" id="token" value="{{survey.token}}" hidden>
     <script>init('{{survey.title}}', '{{survey.xName}}', '{{survey.yName}}')</script>
