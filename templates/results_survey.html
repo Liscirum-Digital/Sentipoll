@@ -50,10 +50,16 @@
         margin: 5px;
       }
       .padding-trash_modal {
-        padding-left: 150px;
+        padding-left: 190px;
+      }
+      .padding-fullscreen_modal {
+        padding-left: 145px;
       }
       .columns:not(.is-desktop) {
         align-items: center;
+      }
+      .column {
+        padding: 0.6rem;
       }
     </style>
     <script type="text/javascript" src="{{url_for('static', filename='google_loader.js')}}"></script>
@@ -79,10 +85,7 @@
       </div>
     {% endif %}
 
-    
-
-    <button onclick="openFullscreen();">Fullscreen Mode</button>
-    <div id="chart_div" style="position: absolute; height: 100%; width: 100%; padding: 20px;"></div>
+    <div id="chart_div" style="position: absolute; height: 95%; width: 100%; padding: 20px;"></div>
     <script>
       var chartDiv = document.getElementById("chart_div");
     
@@ -120,6 +123,15 @@
         </button>
       </form>
       {% endif %}
+    </div>
+    <div class="class-modal padding-fullscreen_modal">
+      <button class="button is-normal" onclick="openFullscreen();">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+            <path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z"/>
+          </svg>
+        </span>
+      </button>
     </div>
     <div class="class-modal">
       <button class="button is-normal js-modal-trigger" data-target="modal-js">
@@ -182,8 +194,10 @@
                   </div>
                 </div>
               </div>
+              <hr style="margin: 0;">
               <div class="column is-half is-offset-2 m-auto">
                 <div class="columns is-mobile">
+                  
                   <div class="column">
                     <input class="number-style" type="number" name="fontSize" id="fontSize" oninput="drawChart()" value="20">
                   </div>
@@ -192,6 +206,7 @@
                   </div>
                 </div>
               </div>
+              <hr style="margin: 0;">
               <div class="column is-half is-offset-2 m-auto">
                 <div class="columns is-mobile">
                   <div class="column">

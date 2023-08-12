@@ -16,8 +16,8 @@
         <script>
             function timerStart() { 
             setTimeout(function(){
-                window.close();
-                },1000);
+                history.back();
+                },500);
             }
         </script>
     </head>
@@ -31,8 +31,8 @@
                     <div class="column has-text-centered-tablet acess-padding dark">
                         <p class="is-family-monospace is-size-1-desktop is-size-3-touch acess-margin dark-white">Möchten Sie die Daten zu "{{title}}" herunterladen?</p>
                         <form action="" method="post">
-                            <a onclick="timerStart();"><input class="button is-medium is-responsive shadow" type="submit" value="Herunterladen"></a>
-                            <button class="button is-medium is-responsive shadow" type="button" onclick="timerStart();">Zurück</button>
+                            <a><input class="button is-medium is-responsive shadow" type="submit" value="Herunterladen" onclick="timerStart();"></a>
+                            <button class="button is-medium is-responsive shadow" type="button" onclick="history.back();">Zurück</button>
                         </form>
                     </div>
                 </div>
