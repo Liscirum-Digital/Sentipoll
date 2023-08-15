@@ -1,8 +1,15 @@
 nav {
-    background: rgb(180,52,238);
-    background: linear-gradient(90deg, rgba(180,52,238,1) 0%, rgba(130,0,122,1) 70%, rgba(74,0,67,1) 100%);
+    background: rgb(255,62,70);
+    background: linear-gradient(90deg, rgba(255,62,70,1) 0%, rgba(196,30,58,1) 29%, rgba(160,14,44,1) 59%, rgba(105,0,26,1) 98%);
 }
 .navbar-menu {
-    background: rgb(180,52,238);
-    background: linear-gradient(90deg, rgba(180,52,238,1) 0%, rgba(130,0,122,1) 70%, rgba(74,0,67,1) 100%);
+    background: rgb(255,62,70);
+    background: linear-gradient(90deg, rgba(255,62,70,1) 0%, rgba(196,30,58,1) 29%, rgba(160,14,44,1) 59%, rgba(105,0,26,1) 98%);
+}
+a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-item.is-active,
+.navbar-link:focus,
+.navbar-link:focus-within,
+.navbar-link:hover,
+.navbar-link.is-active {
+  color: rgba(196,30,58,1);
 }

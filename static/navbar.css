@@ -31,5 +31,5 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
 .navbar-link:focus-within,
 .navbar-link:hover,
 .navbar-link.is-active {
-  color: #5d00f4;
+  color: rgb(36, 53, 87);
 }

@@ -1,6 +1,5 @@
 body {
     background-color: rgba(109, 109, 109, 0.014);
-    /*background-color: #000c1a;*/
     margin: 0;
     font-size: 20px;
 }
@@ -41,7 +40,6 @@ body {
 .box {
     margin: 15px;
     box-shadow: 2px 2px 3px 1px #d1d1d1;
-    /*box-shadow: 2px 2px 3px 1px #313131;*/
     border: 1px solid rgba(136, 136, 136, 0.74);
 }
 .access-padding {
@@ -65,7 +63,6 @@ body {
 /* Allgemeines */
 .shadow {
     box-shadow: 3px 3px 10px 1px #e6e6e6;
-    /*box-shadow: 3px 3px 10px 1px #252525;*/
 }
 .schwarz {
     border-color: #b4b4b4;
@@ -80,14 +77,6 @@ body {
 .text-center {
     text-align: center;
 }
-/*
-.dark {
-    background-color: #000c1a;
-}
-.dark-white {
-    color: #ffffff;
-}
-*/
 @media screen and (min-width: 769px) {
         .input-size {
         margin-right: 100px;
