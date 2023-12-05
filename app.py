@@ -41,6 +41,23 @@ class Surveys(db.Model):
     yMax = db.Column(db.Integer, nullable=False) 
     inputsLimit = db.Column(db.Integer, nullable=False)
     createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
+
+class Tasks(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(128), nullable=False)
+    creator = db.Column(db.String(64), nullable=False)
+    token = db.Column(db.String(64), unique=True, nullable=False)
+    content = db.Column(db.Text)
+    subtasks = db.relationship('Subtasks', backref='post')
+    createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
+
+class Subtasks(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(128), nullable=False)
+    done = db.Column(db.Integer, default=0) 
+    checkedWrong = db.Column(db.Integer, default=0) 
+    checkedRight = db.Column(db.Integer, default=0)
+    taskId = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     
 
 # Helper functions
@@ -75,29 +92,7 @@ def start():
         logo_index=2
     return render_template('index.html', user=session.get('username'), admin=session.get('admin'), logo_index=logo_index)
 
-@app.route('/survey/access/<token>', methods=['GET', 'POST'])
-def serve_survey(token):
-    accessedSurvey = Surveys.query.filter_by(token=token).first()
-
-    if request.method == 'POST':
-        # adding to inputs
-        if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
-            return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
-        session[f'{token}_inputs']+=1
-        # writing results into file
-        with open(f'results/{token}.csv', 'a', newline='') as csvfile:
-            resultsWriter = csv.writer(csvfile, delimiter=',')
-            resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
-        return render_template('success.html', token=token, topic='newResult', user=session.get('username'), admin=session.get('admin'))
-
-    # getting data for page
-    # set cookie
-    if (not session.get(f'{token}_inputs')):
-        session.permanent = True
-        session[f'{token}_inputs']=0
-    return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
-        
-
+### Surveys ###
 @app.route('/survey/new', methods=['GET', 'POST'])
 def create_survey():
     if request.method == 'GET':
@@ -131,6 +126,28 @@ def create_survey():
     open(f'results/{token}.csv', 'x') 
     return render_template('success.html', token=token, topic='newSurvey', user=session.get('username'), admin=session.get('admin')) 
 
+@app.route('/survey/access/<token>', methods=['GET', 'POST'])
+def serve_survey(token):
+    accessedSurvey = Surveys.query.filter_by(token=token).first()
+
+    if request.method == 'POST':
+        # adding to inputs
+        if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
+            return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
+        session[f'{token}_inputs']+=1
+        # writing results into file
+        with open(f'results/{token}.csv', 'a', newline='') as csvfile:
+            resultsWriter = csv.writer(csvfile, delimiter=',')
+            resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
+        return render_template('success.html', token=token, topic='newResult', user=session.get('username'), admin=session.get('admin'))
+
+    # getting data for page
+    # set cookie
+    if (not session.get(f'{token}_inputs')):
+        session.permanent = True
+        session[f'{token}_inputs']=0
+    return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
+
 @app.route('/survey/edit/<token>', methods=['GET', 'POST'])
 def edit_survey(token):
     accessedSurvey = Surveys.query.filter_by(token=token).first()
@@ -153,8 +170,6 @@ def edit_survey(token):
     db.session.commit()  
     return render_template('success.html', token=token, topic='editSurvey', user=session.get('username'), admin=session.get('admin')) 
     
-    
-
 @app.route('/survey/results/<token>', methods=['GET', 'POST'])
 def show_results(token):    
     # getting information about the survey
@@ -211,6 +226,81 @@ def delete_point(token):
                 writer.writerow(line)
     return redirect(f'/survey/results/{token}')
 
+@app.route('/update/<token>', methods=['GET'])
+def update_results(token):
+    gatheredData = read_results(token)
+    data = jsonify(gatheredData)
+    return data
+
+### Tasks ###
+@app.route('/task/new', methods=['GET', 'POST'])
+def create_task():
+    if request.method == 'GET':
+        return render_template('create_task.html', user=session.get('username'), admin=session.get('admin'))
+    if (not session.get('username')):
+        return redirect('/user/login')
+
+    # collecting data
+    token = tubaerit_utils.generateToken(8)
+    while (Tasks.query.filter_by(token=token).first()):
+        token = tubaerit_utils.generateToken(8) # making sure the token isnt already used
+
+    # making database entry
+    newTask = Tasks(
+        title=request.form['title'], 
+        creator=session.get('username'), 
+        token=token, 
+        content=request.form['content'])
+    db.session.add(newTask)
+    db.session.commit()
+    db.session.refresh(newTask)     
+
+    subtask_count = 1
+    while f'subtask_{subtask_count}' in request.form:
+        print("Adding subtask")
+        print(f'subtask_{subtask_count}')
+        newSubtask = Subtasks(
+            title=request.form[f'subtask_{subtask_count}'], 
+            taskId=newTask.id)
+        db.session.add(newSubtask)
+        db.session.commit()
+        db.session.refresh(newSubtask)
+        subtask_count += 1
+
+    return render_template('success.html', token=token, topic='newTask', user=session.get('username'), admin=session.get('admin')) 
+
+@app.route('/task/access/<token>', methods=['GET', 'POST'])
+def serve_task(token):
+    accessedTask = Tasks.query.filter_by(token=token).first()
+
+    if request.method == 'POST': #?
+        pass
+
+    # getting data for page
+    # set cookie
+    return render_template('access_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
+
+@app.route('/task/progress/<token>', methods=['GET', 'POST'])
+def progress_task(token):
+    accessedTask = Tasks.query.filter_by(token=token).first()
+
+    if request.method == 'POST':
+        pass
+
+    # getting data for page
+    # set cookie
+    return render_template('progress_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
+
+@app.route('/task/done')
+def done_task():
+    subtaskId = request.args.get('id')
+    currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
+    currentSubtask.done += 1
+    db.session.commit()
+    db.session.refresh(currentSubtask)
+    return render_template('success.html')
+
+
 @app.route('/user/surveys')
 def all_surveys():
     if (not session.get('username')):
@@ -226,12 +316,6 @@ def all_surveys():
         survey['token'] = surveyEntry.token
         surveys.append(survey)
     return render_template('manage_surveys.html', surveys=surveys, admin=session.get('admin'))
-
-@app.route('/update/<token>', methods=['GET'])
-def update_results(token):
-    gatheredData = read_results(token)
-    data = jsonify(gatheredData)
-    return data
 
 @app.route('/user/login', methods=['GET', 'POST'])
 def login_user():

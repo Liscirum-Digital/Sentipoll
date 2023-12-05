@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <title>Umfrage erstellen</title>
+    <style>
+      .field:not(:last-child) {
+        margin-bottom: 5px;
+      }
+      .label:not(:last-child) {
+        margin-bottom: 5px;
+      }
+      .margin-submit {
+        margin-top: 10px;
+      }
+    </style>
+
+    <script>
+        sessionStorage.removeItem('subtask_count'); //reset on page load
+
+        function add_subtask() {
+            if (sessionStorage && 'subtask_count' in sessionStorage) {
+                sessionStorage.subtask_count++;
+            }
+            else {
+                sessionStorage && (sessionStorage.subtask_count = 1);
+            }
+
+            var subtask_input = document.createElement("INPUT");
+            subtask_input.type = 'text';
+            subtask_input.classList.add('subtask_input');
+            subtask_input.name = `subtask_${sessionStorage.subtask_count}`;
+            subtask_input.id = `subtask_${sessionStorage.subtask_count}`;
+            subtask_input.placeholder = `Aufgabentitel ${sessionStorage.subtask_count}`;
+            document.getElementById('task_form').appendChild(subtask_input);
+        }
+
+        function delete_subtask() {
+            if (sessionStorage && 'subtask_count' in sessionStorage && sessionStorage.subtask_count >= 1) {
+                document.getElementById(`subtask_${sessionStorage.subtask_count}`).remove();
+                sessionStorage.subtask_count--;
+            }
+            else {
+                alert("Keine Aufgaben vorhanden!");
+            }
+        }
+    </script>
+  </head>
+  <body>
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
+    <h1>Create task</h1>
+    <form action="/task/new" method="post" id="task_form">
+        <input type="text" name="title" id="task_title" placeholder="Titel" />
+        <textarea name="content" id="task_content" placeholder="Aufgabentext..."></textarea>
+        <input type="button" onclick="add_subtask()" value="Neue Unteraufgabe" />
+        <input type="button" onclick="delete_subtask()" value="Unteraufgabe löschen" />
+        <input type="submit" onclick="reset_subtask_count()">
+    </form>
+    {% include 'link_git.html' %}
+  </body>
+</html>

@@ -130,3 +130,4 @@ dmypy.json
 
 # Resukt files
 results/
+templates/todo.md

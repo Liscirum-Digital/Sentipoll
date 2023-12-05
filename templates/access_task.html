@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <title>Aufgabe: Eingabe</title>
+  </head>
+
+  <script>
+    function send_solved(elementId) {
+      if (!(localStorage && 'subtasks_done' in localStorage)) {
+        localStorage;
+        localStorage.subtasks_done = JSON.stringify([elementId]);
+        fetch("/task/done?id="+elementId)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+      }
+      else if (!(JSON.parse(localStorage.subtasks_done).includes(elementId))) {
+        subtasks_done = JSON.parse(localStorage.subtasks_done);
+        subtasks_done.push(elementId);
+        console.log(subtasks_done)
+        localStorage.subtasks_done = JSON.stringify(subtasks_done);
+        fetch("/task/done?id="+elementId)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+      }    
+      else {
+        //localStorage exists, but task is already done
+      }
+    }
+  </script>
+  <body>
+    {% if user %}
+      {% include 'navbar.html' %}
+    {% endif %}
+    <h1>{{task.title}}</h1>
+    {{task.content}}
+    <br>
+    {% for subtask in task.subtasks %}
+      <input type="checkbox" name="subtask_solved" id="{{ subtask.id }}" oninput="send_solved(this.id)">
+      {{ subtask.title }}
+      <br>
+    {% endfor %}
+    {% include 'link_git.html' %}
+    </div>
+  </body>
+</html>
