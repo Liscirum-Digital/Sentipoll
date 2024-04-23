@@ -42,14 +42,21 @@
     {% if user %}
       {% include 'navbar.html' %}
     {% endif %}
-    <h1>{{task.title}}</h1>
-    {{task.content}}
-    <br>
-    {% for subtask in task.subtasks %}
-      <input type="checkbox" name="subtask_solved" id="{{ subtask.id }}" oninput="send_solved(this.id)">
-      {{ subtask.title }}
-      <br>
-    {% endfor %}
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">{{task.title}}</p>
+            {{task.content}}
+            {% for subtask in task.subtasks %}
+              <input type="checkbox" name="subtask_solved" id="{{ subtask.id }}" oninput="send_solved(this.id)">
+              {{ subtask.title }}
+              <br>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>    
     {% include 'link_git.html' %}
     </div>
   </body>

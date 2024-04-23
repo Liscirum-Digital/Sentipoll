@@ -21,7 +21,7 @@
         margin-bottom: 5px;
       }
       .margin-submit {
-        margin-top: 10px;
+        margin: 10px;
       }
     </style>
 
@@ -60,14 +60,41 @@
     {% if user %}
       {% include 'navbar.html' %}
     {% endif %}
-    <h1>Create task</h1>
-    <form action="/task/new" method="post" id="task_form">
-        <input type="text" name="title" id="task_title" placeholder="Titel" />
-        <textarea name="content" id="task_content" placeholder="Aufgabentext..."></textarea>
-        <input type="button" onclick="add_subtask()" value="Neue Unteraufgabe" />
-        <input type="button" onclick="delete_subtask()" value="Unteraufgabe löschen" />
-        <input type="submit" onclick="reset_subtask_count()">
-    </form>
+    <div class="container dark">
+      <div class="box dark">
+        <div class="columns is-mobile is-centered dark">
+          <div class="column has-text-centered-tablet acess-padding dark">
+            <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">Create task</p>
+            <form action="/task/new" method="post" id="task_form">
+              <div class="field">
+                <label class="label is-size-5-desktop is-size-6-touch dark-white">Titel</label>
+                <div class="control input-size">
+                  <input class="input shadow schwarz dark dark-white p-2" type="text" id="task_title" name="title" placeholder="Titel">
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <textarea class="textarea is-medium" placeholder="Aufgabentext..." name="content" id="task_content"></textarea>
+                </div>
+              </div>
+              <div class="buttons has-addons is-centered">
+                <div class="control">
+                  <input class="button is-medium is-responsive shadow margin-submit" type="button" onclick="add_subtask()" value="Neue Unteraufgabe"/>
+                </div>
+                <div class="control">
+                  <input class="button is-medium is-responsive shadow is-danger is-outlined margin-submit" type="button" onclick="delete_subtask()" value="Unteraufgabe löschen"/>
+                </div>
+                <div class="control">
+                  <button class="button is-medium is-responsive shadow submit-button margin-submit" onclick="reset_subtask_count()">
+                    <span>Senden</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>    
     {% include 'link_git.html' %}
   </body>
 </html>

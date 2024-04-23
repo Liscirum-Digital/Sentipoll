@@ -9,11 +9,13 @@ body {
 }
 @keyframes error-scale {
 	0% {
-		transform: scale(0);
+		transform: scale(0.2);
+        opacity: 0;
 	}
 
 	100% {
 		transform: scale(1);
+        opacity: 1;
 	}
 }
 .massage-round {
@@ -64,9 +66,10 @@ body {
 .shadow {
     box-shadow: 3px 3px 10px 1px #e6e6e6;
 }
+/*
 .schwarz {
     border-color: #b4b4b4;
-    /*border-color: #2c2c2c;*/
+    /*border-color: #2c2c2c;
 }
 .schwarz:focus {
     border-color: #021020;
@@ -74,6 +77,7 @@ body {
 .dark {
     color: #021020;
 }
+*/
 .text-center {
     text-align: center;
 }
