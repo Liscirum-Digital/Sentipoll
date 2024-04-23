@@ -35,8 +35,10 @@
             </p>
           </div>
           <hr style="margin: 15px;">
+          {% if not user and not admin %}
           <a href="/user/login"><button class="button is-medium is-responsive shadow">Login</button></a>
-          <a href="/admin/login"><button class="button is-medium is-responsive shadow">Admin-Login</button></a> 
+          <a href="/admin/login"><button class="button is-medium is-responsive shadow">Admin-Login</button></a>
+          {% endif %} 
           <br><br>
           {% if logo_index == 1%}
             <img src="{{url_for('static', filename='logo_1.png')}}" alt="logo" width="200px" height="200px">
