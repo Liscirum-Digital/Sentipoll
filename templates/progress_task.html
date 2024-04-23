@@ -5,10 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task: Fortschritt</title>
+    <script type="text/javascript" src="{{url_for('static', filename='update_done_subtasks.js')}}"></script>
 </head>
 <body>
     <h1>Aufgabe: {{task.title}}</h1>
-    <table>
+    <table id="subtasksTable">
         <tr>
             <th>Aufgabe</th>
             <th>Gelöst</th>
@@ -21,6 +22,8 @@
             
         {% endfor %}
     </table>
+
+    <script>init("{{task.token}}")</script>
     
 </body>
 </html>
