@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+    {% if admin %}
+      <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+    {% endif %}
+    <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+    <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <title>Sentipoll: Aufgaben-Manager</title>
+    <style>
+      @media only screen and (min-width: 1201px) {
+          .overflow-mobile {
+              overflow-x: auto;
+              table-layout: fixed;
+          }
+      }
+      @media only screen and (max-width: 1200px) {
+          .overflow-mobile {
+              overflow-x: scroll;
+          }
+      }
+      .table {
+        overflow-y: hidden;
+      } 
+    </style>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container dark">
+      <div class="columns is-mobile is-centered dark p-2">
+        <div class="column has-text-centered-tablet acess-padding dark">
+          <p class="is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Aufgaben</p>
+          <div class="table-container">
+            <table class="table is-striped is-narrow is-hoverable is-fullwidth overflow-mobile">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Titel</th>
+                  <!--<th style="width: 10%;">Erledigt</th>-->
+                  <th style="width: 10%;">Token</th>
+                  <th style="width: 10%;">Optionen</th>
+                  <th style="width: 10%;"></th>
+                  <th style="width: 10%;"></th>
+                  <th style="width: 10%;"></th>
+                  <th style="width: 10%;"></th>
+                </tr>
+              </thead>
+              {% for task in tasks %}
+              <tbody>
+                <tr>
+                  <th>{{task.title}}</th>
+                  <!--<th>{{task.doneCount}}</th>-->
+                  <th>{{task.token}}</th>
+                  <th><a href="/task/access/{{task.token}}" target="_blank"><button class="button is-small is-responsive shadow">Werteeingabe</button></a></th>
+                  <th><a href="/task/results/{{task.token}}" target="_blank"><button class="button is-small is-responsive shadow">Ergebnisse</button></a></th>
+                  <th><a href="/task/edit/{{task.token}}" target="_blank"><button class="button is-small is-responsive shadow">Bearbeiten</button></a></th>
+                  <th><a href="/task/delete/{{task.token}}"><button class="button is-small is-responsive shadow is-danger">Löschen</button></th>
+                </tr>
+              </tbody>
+              {%endfor%}
+            </table>
+          </div>
+          <hr style="margin: 15px;">
+          <a href="/task/new"><button class="button is-medium is-responsive shadow">Neuen Task erstellen</button></a>
+        </div>
+      </div>
+    </div>
+    {% include 'link_git.html' %}
+  </body>
+</html>
