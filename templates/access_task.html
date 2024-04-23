@@ -53,4 +53,10 @@
     {% include 'link_git.html' %}
     </div>
   </body>
+  <script>
+    //check already done subtasks
+    for (subtask of JSON.parse(localStorage.subtasks_done)) {
+      document.getElementById(""+subtask).checked = true;
+    }
+  </script>
 </html>

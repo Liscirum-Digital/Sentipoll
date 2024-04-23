@@ -293,12 +293,15 @@ def progress_task(token):
 
 @app.route('/task/done')
 def done_task():
+    
     subtaskId = request.args.get('id')
     currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
     currentSubtask.done += 1
     db.session.commit()
     db.session.refresh(currentSubtask)
     return render_template('success.html')
+
+
 
 
 @app.route('/user/surveys')
