@@ -15,7 +15,7 @@ function init(surveyTitle, x, y) {
   xName=x;
   yName=y;
   currentToken = document.getElementById('token').value;
-  fetch(`/update/${currentToken}`, {
+  fetch(`/survey/update/${currentToken}`, {
       method: 'GET',
       headers: {
       'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ function init(surveyTitle, x, y) {
 // AJAX requests
 function updatePage() {
   currentToken = document.getElementById('token').value;
-  fetch(`/update/${currentToken}`, {
+  fetch(`/survey/update/${currentToken}`, {
       method: 'GET',
       headers: {
       'Content-Type': 'application/json'
