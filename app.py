@@ -303,7 +303,7 @@ def done_task():
 
 @app.route('/task/update/<token>', methods=['GET'])
 def update_subtasks(token):
-    accessedTask = Tasks.query.filter_by(token='yxpxxiyk').first()
+    accessedTask = Tasks.query.filter_by(token=token).first()
     doneSubtasks = []
     for subtaskEntry in accessedTask.subtasks:
         doneSubtasks.append(subtaskEntry.done)
