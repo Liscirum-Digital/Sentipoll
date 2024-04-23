@@ -320,6 +320,23 @@ def all_surveys():
         surveys.append(survey)
     return render_template('manage_surveys.html', surveys=surveys, admin=session.get('admin'))
 
+@app.route('/user/tasks')
+def all_tasks():
+    if (not session.get('username')):
+        return redirect('/user/login')
+    
+    #getting all surveys
+    taskEntries = Tasks.query.filter_by(creator=session.get('username')).all()
+    tasks = []
+    for taskEntry in taskEntries:
+        task = {}
+        task['title'] = taskEntry.title
+        #task['answerCount'] = count_answers(taskEntry.token)
+        task['token'] = taskEntry.token
+        tasks.append(task)
+    print(tasks)
+    return render_template('manage_tasks.html', tasks=tasks, admin=session.get('admin'))
+
 @app.route('/user/login', methods=['GET', 'POST'])
 def login_user():
     if (session.get('username')):
