@@ -3,6 +3,18 @@ body {
     margin: 0;
     font-size: 20px;
 }
+html {
+    overflow-y: auto;
+}
+body::-webkit-scrollbar {
+	width: 1rem;
+}
+body::-webkit-scrollbar-thumb {
+	background: #AAAAAA;
+}
+body::-webkit-scrollbar-track {
+	background: #f4f9f9c5;
+}
 /* Error Messages */
 .error-keyframe {
     animation: error-scale 1.1s ease 0s 1 normal forwards;
