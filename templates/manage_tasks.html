@@ -25,19 +25,16 @@
               overflow-x: scroll;
           }
       }
-      .table {
-        overflow-y: hidden;
-      } 
     </style>
   </head>
   <body>
     {% include 'navbar.html' %}
     <div class="container dark">
-      <div class="columns is-mobile is-centered dark p-2">
+      <div class="columns is-centered dark p-2">
         <div class="column has-text-centered-tablet acess-padding dark">
           <p class="is-size-1-desktop is-size-3-touch acess-margin dark-white">Erstellte Aufgaben</p>
-          <div class="table-container">
-            <table class="table is-striped is-narrow is-hoverable is-fullwidth overflow-mobile">
+          <div class="overflow-mobile">
+            <table class="table is-striped is-narrow is-hoverable is-fullwidth">
               <thead>
                 <tr>
                   <th style="width: 20%;">Titel</th>

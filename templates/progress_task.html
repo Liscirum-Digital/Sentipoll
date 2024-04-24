@@ -1,29 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task: Fortschritt</title>
-    <script type="text/javascript" src="{{url_for('static', filename='update_done_subtasks.js')}}"></script>
-</head>
-<body>
-    <h1>Aufgabe: {{task.title}}</h1>
-    <table id="subtasksTable">
-        <tr>
-            <th>Aufgabe</th>
-            <th>Gelöst</th>
-        </tr>
-        {% for subtask in task.subtasks%}
-        <tr>
-            <td>{{subtask.title}}</td>
-            <td>{{subtask.done}}</td>
-        </tr>
-            
-        {% endfor %}
-    </table>
-
-    <script>init("{{task.token}}")</script>
-    
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="{{url_for('static', filename='defaultstyle.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
+        {% if admin %}
+            <link rel="stylesheet" href="{{url_for('static', filename='admin-style.css')}}">
+        {% endif %}
+        <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
+        <script src="{{url_for('static', filename='nav.js')}}"></script>
+        <title>Task: Fortschritt</title>
+        <style>
+            @media only screen and (min-width: 1201px) {
+                .overflow-mobile {
+                    overflow-x: auto;
+                    table-layout: fixed;
+                }
+            }
+            @media only screen and (max-width: 1200px) {
+                .overflow-mobile {
+                    overflow-x: scroll;
+                }
+            }
+        </style>
+        <script type="text/javascript" src="{{url_for('static', filename='update_done_subtasks.js')}}"></script>
+    </head>
+    <body>
+        {% if user %}
+            {% include 'navbar.html' %}
+        {% endif %}
+        <div class="container dark">
+            <div class="columns is-centered dark p-2">
+                <div class="column has-text-centered-tablet acess-padding dark">
+                    <p class="is-size-1-desktop is-size-3-touch acess-margin dark-white">Fortschritt für Aufgabe: {{task.title}}</p>
+                    <div class="overflow-mobile">
+                        <table class="table is-striped is-narrow is-hoverable is-fullwidth" id="subtasksTable">
+                            <thead>
+                            <tr>
+                                <th style="width: 90%;">Aufgabe</th>
+                                <th style="width: 10%;">Gelöst</th>
+                            </tr>
+                            </thead>
+                            {% for subtask in task.subtasks%}
+                            <tbody>
+                            <tr>
+                                <th>{{subtask.title}}</th>
+                                <th>{{subtask.done}}</th>
+                            </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <hr style="margin: 15px;">
+                    <a href="/task/new"><button class="button is-medium is-responsive shadow">Neuen Task erstellen</button></a>
+                </div>
+            </div>
+        </div>
+        {% include 'link_git.html' %}
+        <script>init("{{task.token}}")</script>
+    </body>
 </html>
