@@ -16,19 +16,38 @@
   </head>
 
   <script>
+    const key = 0x55;
+    // Function to encrypt and store array in LocalStorage
+    function encrypt_array(array) {
+        const encryptedArray = array.map(element => element ^ key);
+        return encryptedArray;
+    }
+
+    // Function to retrieve and decrypt array from LocalStorage
+    function decrypt_array(key) {
+        const encryptedArrayString = localStorage.subtasks_done;
+        if (encryptedArrayString) {
+            const encryptedArray = JSON.parse(encryptedArrayString);
+            const decryptedArray = encryptedArray.map(element => element ^ key); // XOR each element with the key
+            console.log(decryptedArray)
+            return decryptedArray;
+        }
+        return null;
+    }
+
     function send_solved(elementId) {
+      elementId = parseInt(elementId);
       if (!(localStorage && 'subtasks_done' in localStorage)) {
         localStorage;
-        localStorage.subtasks_done = JSON.stringify([elementId]);
+        localStorage.subtasks_done = JSON.stringify(encrypt_array([elementId]));
         fetch("/task/done?id="+elementId)
         .then((response) => response.json())
         .then((json) => console.log(json));
       }
-      else if (!(JSON.parse(localStorage.subtasks_done).includes(elementId))) {
-        subtasks_done = JSON.parse(localStorage.subtasks_done);
+      else if (!(decrypt_array().includes(elementId))) {
+        subtasks_done = decrypt_array();
         subtasks_done.push(elementId);
-        console.log(subtasks_done)
-        localStorage.subtasks_done = JSON.stringify(subtasks_done);
+        localStorage.subtasks_done = JSON.stringify(encrypt_array(subtasks_done));
         fetch("/task/done?id="+elementId)
         .then((response) => response.json())
         .then((json) => console.log(json));
@@ -55,7 +74,7 @@
   </body>
   <script>
     //check already done subtasks
-    for (subtask of JSON.parse(localStorage.subtasks_done)) {
+    for (subtask of decrypt_array()) {
       document.getElementById(""+subtask).checked = true;
     }
   </script>
