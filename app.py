@@ -394,4 +394,13 @@ def admin_user():
     if (not session.get('username')):
         session['username'] = 'Admin'
     return render_template('success.html', topic='admin-login', user=session.get('username'), admin=session.get('admin'))
+
+# error handlers
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500
     
