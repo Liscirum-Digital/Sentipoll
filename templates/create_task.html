@@ -38,7 +38,7 @@
 
             var subtask_input = document.createElement("INPUT");
             subtask_input.type = 'text';
-            subtask_input.classList.add('subtask_input');
+            subtask_input.classList.add('subtask_input','p-2','input','shadow','my-1');
             subtask_input.name = `subtask_${sessionStorage.subtask_count}`;
             subtask_input.id = `subtask_${sessionStorage.subtask_count}`;
             subtask_input.placeholder = `Aufgabentitel ${sessionStorage.subtask_count}`;
@@ -90,6 +90,7 @@
                   </button>
                 </div>
               </div>
+
             </form>
           </div>
         </div>

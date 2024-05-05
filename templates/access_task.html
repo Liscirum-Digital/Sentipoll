@@ -47,7 +47,10 @@
         <div class="columns is-mobile is-centered dark">
           <div class="column has-text-centered-tablet acess-padding dark">
             <p class="is-family-monospace is-size-2-desktop is-size-3-touch dark-white">{{task.title}}</p>
-            {{task.content}}
+            <span class="is-size-5-desktop is-size-6-touch is-italic dark-white">Aufgabe:</span>
+            <p class="is-size-5-desktop is-size-6-touch">
+              {{task.content}}
+            </p>
             {% for subtask in task.subtasks %}
               <input type="checkbox" name="subtask_solved" id="{{ subtask.id }}" oninput="send_solved(this.id)">
               {{ subtask.title }}

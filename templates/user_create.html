@@ -12,6 +12,17 @@
     {% endif %}
     <link rel="icon" href="{{url_for('static', filename='logo_1.png')}}">
     <script src="{{url_for('static', filename='nav.js')}}"></script>
+    <script>
+      function pwToggle() {
+        var temp = document.getElementById("password","authCode");
+        if (temp.type === "password") {
+            temp.type = "text";
+        }
+        else {
+            temp.type = "password";
+        }
+      }
+    </script>
     <title>Sentipoll: Nutzererstellung</title>
   </head>
   <body>
@@ -33,6 +44,7 @@
                 <label class="label is-size-4-desktop is-size-6-touch dark-white">Passwort</label>
                 <div class="control input-size">
                   <input class="input shadow schwarz dark dark-white p-5" type="password" name="userPassword" id="userPassword" placeholder="Passwort" required>
+                  <input class="form-check-input mt-0 checkbox-color" type="checkbox" value="Aktivieren" onclick="pwToggle()">
                 </div>
               </div>
               <div class="control">
