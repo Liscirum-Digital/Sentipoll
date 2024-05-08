@@ -226,7 +226,7 @@ def delete_point(token):
                 writer.writerow(line)
     return redirect(f'/survey/results/{token}')
 
-@app.route('/update/<token>', methods=['GET'])
+@app.route('/survey/update/<token>', methods=['GET'])
 def update_results(token):
     gatheredData = read_results(token)
     data = jsonify(gatheredData)
@@ -280,7 +280,7 @@ def serve_task(token):
     # set cookie
     return render_template('access_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
 
-@app.route('/task/progress/<token>', methods=['GET', 'POST'])
+@app.route('/task/results/<token>', methods=['GET', 'POST'])
 def progress_task(token):
     accessedTask = Tasks.query.filter_by(token=token).first()
 
@@ -314,6 +314,16 @@ def delete_task(token):
     db.session.commit()
 
     return redirect('/user/tasks')
+
+@app.route('/task/update/<token>', methods=['GET'])
+def update_subtasks(token):
+    accessedTask = Tasks.query.filter_by(token=token).first()
+    doneSubtasks = []
+    for subtaskEntry in accessedTask.subtasks:
+        doneSubtasks.append(subtaskEntry.done)
+    print(doneSubtasks)
+    data = jsonify(doneSubtasks)
+    return data
 
 @app.route('/user/surveys')
 def all_surveys():
