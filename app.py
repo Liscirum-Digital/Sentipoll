@@ -291,7 +291,7 @@ def progress_task(token):
     # set cookie
     return render_template('progress_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
 
-@app.route('/task/done')
+@app.route('/subtask/done')
 def done_task():
     
     subtaskId = request.args.get('id')
@@ -301,7 +301,7 @@ def done_task():
     db.session.refresh(currentSubtask)
     return render_template('success.html')
 
-@app.route('/task/undone')
+@app.route('/subtask/undone')
 def undone_task():
     subtaskId = request.args.get('id')
     currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
