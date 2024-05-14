@@ -301,6 +301,15 @@ def done_task():
     db.session.refresh(currentSubtask)
     return render_template('success.html')
 
+@app.route('/task/undone')
+def undone_task():
+    subtaskId = request.args.get('id')
+    currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
+    currentSubtask.done -= 1
+    db.session.commit()
+    db.session.refresh(currentSubtask)
+    return render_template('success.html')
+
 @app.route('/task/delete/<token>', methods=['GET', 'POST'])
 def delete_task(token):
     accessedTask = Tasks.query.filter_by(token=token).first()

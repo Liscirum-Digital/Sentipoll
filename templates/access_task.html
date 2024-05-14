@@ -27,14 +27,18 @@
       else if (!(JSON.parse(localStorage.subtasks_done).includes(elementId))) {
         subtasks_done = JSON.parse(localStorage.subtasks_done);
         subtasks_done.push(elementId);
-        console.log(subtasks_done)
         localStorage.subtasks_done = JSON.stringify(subtasks_done);
         fetch("/task/done?id="+elementId)
         .then((response) => response.json())
         .then((json) => console.log(json));
       }    
       else {
-        //localStorage exists, but task is already done
+        subtasks_done = JSON.parse(localStorage.subtasks_done);
+        subtasks_done.splice(subtasks_done.indexOf(elementId), 1);
+        localStorage.subtasks_done = JSON.stringify(subtasks_done);
+        fetch("/task/undone?id="+elementId)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
       }
     }
   </script>
@@ -66,7 +70,10 @@
   <script>
     //check already done subtasks
     for (subtask of JSON.parse(localStorage.subtasks_done)) {
-      document.getElementById(""+subtask).checked = true;
+      if (document.getElementById(""+subtask)) {
+        document.getElementById(""+subtask).checked = true;
+      }
+      
     }
   </script>
 </html>
