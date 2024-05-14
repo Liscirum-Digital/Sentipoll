@@ -272,14 +272,14 @@ def create_task():
 
 @app.route('/task/access/<token>', methods=['GET', 'POST'])
 def serve_task(token):
-    accessedTask = Tasks.query.filter_by(token=token).first()
-
-    if request.method == 'POST': #?
-        pass
-
-    # getting data for page
-    # set cookie
-    return render_template('access_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
+    if (Tasks.query.filter_by(token=token).first()):
+        accessedTask = Tasks.query.filter_by(token=token).first()
+        if request.method == 'POST': #?
+            pass
+        # getting data for page
+        # set cookie
+        return render_template('access_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
+    return render_template('404.html'), 404
 
 @app.route('/task/results/<token>', methods=['GET', 'POST'])
 def progress_task(token):
