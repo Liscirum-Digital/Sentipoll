@@ -345,11 +345,11 @@ def delete_task(token):
 @app.route('/task/update/<token>', methods=['GET'])
 def update_subtasks(token):
     accessedTask = Tasks.query.filter_by(token=token).first()
+    allDone = accessedTask.done
     doneSubtasks = []
     for subtaskEntry in accessedTask.subtasks:
         doneSubtasks.append(subtaskEntry.done)
-    print(doneSubtasks)
-    data = jsonify(doneSubtasks)
+    data = jsonify([allDone, doneSubtasks])
     return data
 
 @app.route('/user/surveys')

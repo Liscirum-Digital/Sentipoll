@@ -47,6 +47,7 @@ function send_solved(elementId) {
         fetch("/task/undone?token="+document.getElementById("taskId").value)
         .then((response) => response.json())
         .then((json) => console.log(json));
+        taskDone = false;
       }
       
     }
