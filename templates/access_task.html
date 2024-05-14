@@ -29,6 +29,7 @@
             <p class="is-size-5-desktop is-size-6-touch">
               {{task.content}}
             </p>
+            <input type="text" id="taskId" value="{{ task.token }}" hidden \>
             {% for subtask in task.subtasks %}
               <input type="checkbox" name="subtask_solved" id="{{ subtask.id }}" oninput="send_solved(this.id)">
               {{ subtask.title }}

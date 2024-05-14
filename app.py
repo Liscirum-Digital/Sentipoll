@@ -49,6 +49,7 @@ class Tasks(db.Model):
     token = db.Column(db.String(64), unique=True, nullable=False)
     content = db.Column(db.Text)
     subtasks = db.relationship('Subtasks', backref='task')
+    done = db.Column(db.Integer, default=0) 
     createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
 
 class Subtasks(db.Model):
@@ -292,8 +293,7 @@ def progress_task(token):
     return render_template('progress_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
 
 @app.route('/subtask/done')
-def done_task():
-    
+def done_subtask():
     subtaskId = request.args.get('id')
     currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
     currentSubtask.done += 1
@@ -302,12 +302,30 @@ def done_task():
     return render_template('success.html')
 
 @app.route('/subtask/undone')
-def undone_task():
+def undone_subtask():
     subtaskId = request.args.get('id')
     currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
     currentSubtask.done -= 1
     db.session.commit()
     db.session.refresh(currentSubtask)
+    return render_template('success.html')
+
+@app.route('/task/done')
+def done_task():
+    taskToken = request.args.get('token')
+    currentTask = Tasks.query.filter_by(token=taskToken).first()
+    currentTask.done += 1
+    db.session.commit()
+    db.session.refresh(currentTask)
+    return render_template('success.html')
+
+@app.route('/task/undone')
+def undone_task():
+    taskToken = request.args.get('token')
+    currentTask = Tasks.query.filter_by(token=taskToken).first()
+    currentTask.done -= 1
+    db.session.commit()
+    db.session.refresh(currentTask)
     return render_template('success.html')
 
 @app.route('/task/delete/<token>', methods=['GET', 'POST'])

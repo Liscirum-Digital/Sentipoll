@@ -1,3 +1,17 @@
+taskDone = false;
+
+function all_subtasks_done() {
+  let checkboxes = document.querySelectorAll('input[type="checkbox"][name="subtask_solved"]');
+  subtasks_done = JSON.parse(localStorage.subtasks_done);
+  allDone = true;
+  checkboxes.forEach(function(checkbox) {
+    if (!subtasks_done.includes(checkbox.id)) {
+      allDone = false;
+    }
+  });
+  return allDone;
+}
+
 function send_solved(elementId) {
     if (!(localStorage && 'subtasks_done' in localStorage)) {
       localStorage;
@@ -13,6 +27,14 @@ function send_solved(elementId) {
       fetch("/subtask/done?id="+elementId)
       .then((response) => response.json())
       .then((json) => console.log(json));
+
+      //entire task is done
+      if (all_subtasks_done()) { 
+        taskDone = true;
+        fetch("/task/done?token="+document.getElementById("taskId").value)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+      }
     }    
     else {
       subtasks_done = JSON.parse(localStorage.subtasks_done);
@@ -21,5 +43,11 @@ function send_solved(elementId) {
       fetch("/subtask/undone?id="+elementId)
       .then((response) => response.json())
       .then((json) => console.log(json));
+      if (taskDone) {
+        fetch("/task/undone?token="+document.getElementById("taskId").value)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+      }
+      
     }
   }
