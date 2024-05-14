@@ -19,10 +19,16 @@
                     overflow-x: auto;
                     table-layout: fixed;
                 }
+                .chart_style {
+                    padding: 60px;
+                }
             }
             @media only screen and (max-width: 1200px) {
                 .overflow-mobile {
                     overflow-x: scroll;
+                }
+                .chart_style {
+                    padding: 5px;
                 }
             }
             .overflow-mobile {
@@ -61,7 +67,7 @@
                             {% endfor %}
                         </table>
                     </div>
-                    <div id="chart_div"></div>
+                    <div id="chart_div" class="chart_style"></div>
                     <hr style="margin: 15px;">
                     <a href="/task/new"><button class="button is-medium is-responsive shadow">Neuen Task erstellen</button></a>
                 </div>
