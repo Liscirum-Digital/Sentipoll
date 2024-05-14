@@ -182,7 +182,8 @@ def show_results(token):
         survey=accessedSurvey, 
         data=jsonify(gatheredData),
         username=session.get('username'),
-        creator = session.get('username') == accessedSurvey.creator)
+        creator = session.get('username') == accessedSurvey.creator,
+        admin=session.get('admin'))
 
 @app.route('/survey/delete/<token>', methods=['GET', 'POST'])
 def delete_survey(token):
