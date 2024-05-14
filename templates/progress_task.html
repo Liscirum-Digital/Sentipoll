@@ -32,6 +32,7 @@
                 padding: .15em .3em;
             }
         </style>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript" src="{{url_for('static', filename='update_done_subtasks.js')}}"></script>
     </head>
     <body>
@@ -60,6 +61,7 @@
                             {% endfor %}
                         </table>
                     </div>
+                    <div id="chart_div"></div>
                     <hr style="margin: 15px;">
                     <a href="/task/new"><button class="button is-medium is-responsive shadow">Neuen Task erstellen</button></a>
                 </div>
