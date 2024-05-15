@@ -49,13 +49,14 @@ class Tasks(db.Model):
     token = db.Column(db.String(64), unique=True, nullable=False)
     content = db.Column(db.Text)
     subtasks = db.relationship('Subtasks', backref='task')
-    done = db.Column(db.Integer, default=0) 
+    done = db.Column(db.Integer, default=0)
     createdTime = db.Column(db.DateTime(), default=datetime.datetime.now()) 
 
 class Subtasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), nullable=False)
     done = db.Column(db.Integer, default=0) 
+    problem = db.Column(db.Integer, default=0) 
     checkedWrong = db.Column(db.Integer, default=0) 
     checkedRight = db.Column(db.Integer, default=0)
     taskId = db.Column(db.Integer, db.ForeignKey('tasks.id'))
@@ -311,6 +312,24 @@ def undone_subtask():
     db.session.refresh(currentSubtask)
     return render_template('success.html')
 
+@app.route('/subtask/problem')
+def problem_subtask():
+    subtaskId = request.args.get('id')
+    currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
+    currentSubtask.problem += 1
+    db.session.commit()
+    db.session.refresh(currentSubtask)
+    return render_template('success.html')
+
+@app.route('/subtask/unproblem')
+def unproblem_subtask():
+    subtaskId = request.args.get('id')
+    currentSubtask = Subtasks.query.filter_by(id=subtaskId).first()
+    currentSubtask.problem -= 1
+    db.session.commit()
+    db.session.refresh(currentSubtask)
+    return render_template('success.html')
+
 @app.route('/task/done')
 def done_task():
     taskToken = request.args.get('token')
@@ -348,9 +367,11 @@ def update_subtasks(token):
     accessedTask = Tasks.query.filter_by(token=token).first()
     allDone = accessedTask.done
     doneSubtasks = []
+    problemSubtasks = []
     for subtaskEntry in accessedTask.subtasks:
         doneSubtasks.append(subtaskEntry.done)
-    data = jsonify([allDone, doneSubtasks])
+        problemSubtasks.append(subtaskEntry.problem)
+    data = jsonify([allDone, doneSubtasks, problemSubtasks])
     return data
 
 @app.route('/user/surveys')

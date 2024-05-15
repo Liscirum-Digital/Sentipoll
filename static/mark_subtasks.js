@@ -5,7 +5,7 @@ function all_subtasks_done() {
   subtasks_done = JSON.parse(localStorage.subtasks_done);
   allDone = true;
   checkboxes.forEach(function(checkbox) {
-    if (!subtasks_done.includes(checkbox.id)) {
+    if (!subtasks_done.includes(checkbox.id.split('_')[1])) {
       allDone = false;
     }
   });
@@ -13,18 +13,19 @@ function all_subtasks_done() {
 }
 
 function send_solved(elementId) {
+    var subtaskId = elementId.split('_')[1];
     if (!(localStorage && 'subtasks_done' in localStorage)) {
       localStorage;
-      localStorage.subtasks_done = JSON.stringify([elementId]);
-      fetch("/subtask/done?id="+elementId)
+      localStorage.subtasks_done = JSON.stringify([subtaskId]);
+      fetch("/subtask/done?id="+subtaskId)
       .then((response) => response.json())
       .then((json) => console.log(json));
     }
-    else if (!(JSON.parse(localStorage.subtasks_done).includes(elementId))) {
+    else if (!(JSON.parse(localStorage.subtasks_done).includes(subtaskId))) {
       subtasks_done = JSON.parse(localStorage.subtasks_done);
-      subtasks_done.push(elementId);
+      subtasks_done.push(subtaskId);
       localStorage.subtasks_done = JSON.stringify(subtasks_done);
-      fetch("/subtask/done?id="+elementId)
+      fetch("/subtask/done?id="+subtaskId)
       .then((response) => response.json())
       .then((json) => console.log(json));
 
@@ -38,9 +39,9 @@ function send_solved(elementId) {
     }    
     else {
       subtasks_done = JSON.parse(localStorage.subtasks_done);
-      subtasks_done.splice(subtasks_done.indexOf(elementId), 1);
+      subtasks_done.splice(subtasks_done.indexOf(subtaskId), 1);
       localStorage.subtasks_done = JSON.stringify(subtasks_done);
-      fetch("/subtask/undone?id="+elementId)
+      fetch("/subtask/undone?id="+subtaskId)
       .then((response) => response.json())
       .then((json) => console.log(json));
       if (taskDone) {
@@ -52,3 +53,30 @@ function send_solved(elementId) {
       
     }
   }
+
+function send_problem(elementId) {
+  var subtaskId = elementId.split('_')[1];
+  if (!(localStorage && 'subtasks_problem' in localStorage)) {
+    localStorage;
+    localStorage.subtasks_problem = JSON.stringify([subtaskId]);
+    fetch("/subtask/problem?id="+subtaskId)
+    .then((response) => response.json())
+    .then((json) => console.log(json));
+  }
+  else if (!(JSON.parse(localStorage.subtasks_problem).includes(subtaskId))) {
+    subtasks_problem = JSON.parse(localStorage.subtasks_problem);
+    subtasks_problem.push(subtaskId);
+    localStorage.subtasks_problem = JSON.stringify(subtasks_problem);
+    fetch("/subtask/problem?id="+subtaskId)
+    .then((response) => response.json())
+    .then((json) => console.log(json));
+  }    
+  else {
+    subtasks_problem = JSON.parse(localStorage.subtasks_problem);
+    subtasks_problem.splice(subtasks_problem.indexOf(subtaskId), 1);
+    localStorage.subtasks_problem = JSON.stringify(subtasks_problem);
+    fetch("/subtask/unproblem?id="+subtaskId)
+    .then((response) => response.json())
+    .then((json) => console.log(json));
+  }
+}

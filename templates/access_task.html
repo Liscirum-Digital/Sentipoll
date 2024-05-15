@@ -31,7 +31,8 @@
             </p>
             <input type="text" id="taskId" value="{{ task.token }}" hidden \>
             {% for subtask in task.subtasks %}
-              <input type="checkbox" name="subtask_solved" id="{{ subtask.id }}" oninput="send_solved(this.id)">
+              <input type="checkbox" name="subtask_solved" id="solved_{{ subtask.id }}" oninput="send_solved(this.id)">
+              <input type="checkbox" name="subtask_problem" id="problem_{{ subtask.id }}" oninput="send_problem(this.id)">
               {{ subtask.title }}
               <br>
             {% endfor %}
@@ -45,8 +46,15 @@
   <script>
     //check already done subtasks
     for (subtask of JSON.parse(localStorage.subtasks_done)) {
-      if (document.getElementById(""+subtask)) {
-        document.getElementById(""+subtask).checked = true;
+      if (document.getElementById("solved_"+subtask)) {
+        document.getElementById("solved_"+subtask).checked = true;
+      }
+      
+    }
+    //check problem subtasks
+    for (subtask of JSON.parse(localStorage.subtasks_problem)) {
+      if (document.getElementById("problem_"+subtask)) {
+        document.getElementById("problem_"+subtask).checked = true;
       }
       
     }

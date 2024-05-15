@@ -1,7 +1,8 @@
 google.charts.load('current', {packages: ['corechart', 'bar']});
 google.charts.setOnLoadCallback(draw_chart);
-var doneSubtasks = []
 var allDone = 0;
+var doneSubtasks = [];
+var problemSubtasks = [];
 currentToken = "";
 
 function init(token) {
@@ -28,9 +29,10 @@ function updatePage() {
   })
   .then(response => response.json())
   .then(data => {
-      if (JSON.stringify(data[1])!=JSON.stringify(doneSubtasks)) {
-        doneSubtasks = data[1];
+      if (JSON.stringify(data[1])!=JSON.stringify(doneSubtasks) || JSON.stringify(data[2])!=JSON.stringify(problemSubtasks)) {
         allDone = data[0];
+        doneSubtasks = data[1];
+        problemSubtasks = data[2];
         edit_table();
         draw_chart();
       }
@@ -51,6 +53,7 @@ function draw_chart() {
   var chartData = new google.visualization.DataTable();
   chartData.addColumn('string', 'Aufgabe');
   chartData.addColumn('number', 'Erledigt');
+  chartData.addColumn('number', 'Problem');
   chartData.addColumn('number', 'Fertig');
 
   var table = document.getElementById('subtasksTable');
@@ -58,7 +61,7 @@ function draw_chart() {
     var row = table.rows[i+1];
     var titleCell = row.cells[0];
     console.log([[String(titleCell.innerHTML), doneSubtasks[i]],])
-    chartData.addRows([[String(titleCell.innerHTML), doneSubtasks[i], allDone]]);
+    chartData.addRows([[String(titleCell.innerHTML), doneSubtasks[i], problemSubtasks[i], allDone]]);
   }
 
   var options = {
@@ -69,7 +72,7 @@ function draw_chart() {
       title: 'Erledigt'
     },
     seriesType: 'bars',
-    series: {1: {type: 'line'}}
+    series: {2: {type: 'line'}}
   };
 
   var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
