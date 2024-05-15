@@ -131,24 +131,25 @@ def create_survey():
 @app.route('/survey/access/<token>', methods=['GET', 'POST'])
 def serve_survey(token):
     accessedSurvey = Surveys.query.filter_by(token=token).first()
+    if (accessedSurvey):
+        if request.method == 'POST':
+            # adding to inputs
+            if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
+                return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
+            session[f'{token}_inputs']+=1
+            # writing results into file
+            with open(f'results/{token}.csv', 'a', newline='') as csvfile:
+                resultsWriter = csv.writer(csvfile, delimiter=',')
+                resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
+            return render_template('success.html', token=token, topic='newResult', user=session.get('username'), admin=session.get('admin'))
 
-    if request.method == 'POST':
-        # adding to inputs
-        if (session.get(f'{token}_inputs') >= accessedSurvey.inputsLimit):
-            return render_template('access_survey.html', errorCode='overLimit', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
-        session[f'{token}_inputs']+=1
-        # writing results into file
-        with open(f'results/{token}.csv', 'a', newline='') as csvfile:
-            resultsWriter = csv.writer(csvfile, delimiter=',')
-            resultsWriter.writerow([request.form['xInput'],  request.form['yInput']])
-        return render_template('success.html', token=token, topic='newResult', user=session.get('username'), admin=session.get('admin'))
-
-    # getting data for page
-    # set cookie
-    if (not session.get(f'{token}_inputs')):
-        session.permanent = True
-        session[f'{token}_inputs']=0
-    return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
+        # getting data for page
+        # set cookie
+        if (not session.get(f'{token}_inputs')):
+            session.permanent = True
+            session[f'{token}_inputs']=0
+        return render_template('access_survey.html', survey=accessedSurvey, user=session.get('username'), admin=session.get('admin'))
+    return render_template('404.html')
 
 @app.route('/survey/edit/<token>', methods=['GET', 'POST'])
 def edit_survey(token):
@@ -176,15 +177,17 @@ def edit_survey(token):
 def show_results(token):    
     # getting information about the survey
     accessedSurvey = Surveys.query.filter_by(token=token).first()
-    # getting results
-    gatheredData = read_results(token)
-    return render_template(
-        'results_survey.html',
-        survey=accessedSurvey, 
-        data=jsonify(gatheredData),
-        username=session.get('username'),
-        creator = session.get('username') == accessedSurvey.creator,
-        admin=session.get('admin'))
+    if (accessedSurvey):
+        # getting results
+        gatheredData = read_results(token)
+        return render_template(
+            'results_survey.html',
+            survey=accessedSurvey, 
+            data=jsonify(gatheredData),
+            username=session.get('username'),
+            creator = session.get('username') == accessedSurvey.creator,
+            admin=session.get('admin'))
+    return render_template('404.html')
 
 @app.route('/survey/delete/<token>', methods=['GET', 'POST'])
 def delete_survey(token):
@@ -274,8 +277,8 @@ def create_task():
 
 @app.route('/task/access/<token>', methods=['GET', 'POST'])
 def serve_task(token):
-    if (Tasks.query.filter_by(token=token).first()):
-        accessedTask = Tasks.query.filter_by(token=token).first()
+    accessedTask = Tasks.query.filter_by(token=token).first()
+    if (accessedTask):
         if request.method == 'POST': #?
             pass
         # getting data for page
@@ -286,13 +289,11 @@ def serve_task(token):
 @app.route('/task/results/<token>', methods=['GET', 'POST'])
 def progress_task(token):
     accessedTask = Tasks.query.filter_by(token=token).first()
-
-    if request.method == 'POST':
-        pass
-
-    # getting data for page
-    # set cookie
-    return render_template('progress_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
+    if (accessedTask):
+        # getting data for page
+        # set cookie
+        return render_template('progress_task.html', task=accessedTask, user=session.get('username'), admin=session.get('admin'))
+    return render_template('404.html')
 
 @app.route('/subtask/done')
 def done_subtask():
