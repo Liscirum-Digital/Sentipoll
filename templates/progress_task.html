@@ -53,8 +53,9 @@
                         <table class="table is-striped is-narrow is-hoverable is-fullwidth" id="subtasksTable">
                             <thead>
                             <tr>
-                                <th style="width: 90%;">Aufgabe</th>
+                                <th style="width: 80%;">Aufgabe</th>
                                 <th style="width: 10%;">Gelöst</th>
+                                <th style="width: 10%;">Problem</th>
                             </tr>
                             </thead>
                             {% for subtask in task.subtasks%}
@@ -62,6 +63,7 @@
                             <tr>
                                 <th>{{subtask.title}}</th>
                                 <th>{{subtask.done}}</th>
+                                <th>{{subtask.problem}}</th>
                             </tr>
                             </tbody>
                             {% endfor %}
