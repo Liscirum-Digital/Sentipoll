@@ -69,13 +69,16 @@ function draw_chart() {
       title: 'Aufgabe',
     },
     vAxis: {
-      title: 'Erledigt'
     },
     seriesType: 'bars',
-    series: {2: {type: 'line'}}
+    series: {2: {type: 'line'}},
+    legend: { position: 'bottom' }
   };
 
   var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
 
   chart.draw(chartData, options);
+
 }
+
+window.addEventListener('resize', draw_chart);
